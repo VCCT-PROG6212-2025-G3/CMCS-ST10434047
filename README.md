@@ -58,6 +58,11 @@ Below is the Entity-Relationship Diagram (ERD) for the system.
 
 <img width="1582" alt="Entity-Relationship Diagram for the Contract Monthly Claim System" src="https://github.com/user-attachments/assets/d353f8ae-7d5e-415c-8f22-37b125a4cffe" />
 
+Below is the Project Plan.
+
+<img width="3242" height="1196" alt="Project Outline" src="https://github.com/user-attachments/assets/a8d3b1f8-c407-4ee4-b5ea-34b43daccc36" />
+" />
+
 ---
 
 ## Installation
