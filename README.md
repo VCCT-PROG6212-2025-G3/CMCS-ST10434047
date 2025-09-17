@@ -88,6 +88,6 @@ To get a local copy up and running, follow these simple steps.
 
 ## Contact
 
-*Your Name* - *Your Email*
+*Jamie Abrahams* - *st10434047@vcconnect.edu.za*
 
 Project Link: [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047](https://github.com/your_username/CMCS-ST10434047)
