@@ -107,7 +107,7 @@ To get a local copy up and running, follow these simple steps.
 
 ## Usage
 
-* Coming Soon *
+**Coming Soon**
 
 ---
 
