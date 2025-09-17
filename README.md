@@ -80,6 +80,9 @@ Administrator Approvals Page
 New Claim Form
 <img width="1261" height="1117" alt="NewClaim" src="https://github.com/user-attachments/assets/d16884f0-f49d-497a-9f83-7e2c360c8eb6" />
 
+Figma Design Link
+https://www.figma.com/design/Dh0Lc40pfZePsIY8HC6joI/CMCS-POE?node-id=0-1&t=wjscumqRIK5OCFyM-1
+
 ---
 
 ## Installation
@@ -104,12 +107,13 @@ To get a local copy up and running, follow these simple steps.
 
 ## Usage
 
-*To be added: Include screenshots and instructions on how to use the application's key features.*
+* Coming Soon *
 
 ---
 
 ## Contact
 
 *Jamie Abrahams* - *st10434047@vcconnect.edu.za*
+ST10434047
 
 Project Link: [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047](https://github.com/your_username/CMCS-ST10434047)
