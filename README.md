@@ -61,7 +61,6 @@ Below is the Entity-Relationship Diagram (ERD) for the system.
 Below is the Project Plan.
 
 <img width="3242" height="1196" alt="Project Outline" src="https://github.com/user-attachments/assets/a8d3b1f8-c407-4ee4-b5ea-34b43daccc36" />
-" />
 
 ---
 
