@@ -58,9 +58,27 @@ Below is the Entity-Relationship Diagram (ERD) for the system.
 
 <img width="1582" alt="Entity-Relationship Diagram for the Contract Monthly Claim System" src="https://github.com/user-attachments/assets/d353f8ae-7d5e-415c-8f22-37b125a4cffe" />
 
-Below is the Project Plan.
+---
+
+## Project Plan
 
 <img width="3242" height="1196" alt="Project Outline" src="https://github.com/user-attachments/assets/a8d3b1f8-c407-4ee4-b5ea-34b43daccc36" />
+
+---
+
+## UI Mockup
+
+Lecturer Dashboard
+<img width="1342" height="1113" alt="LecturerDashboard" src="https://github.com/user-attachments/assets/0246ef99-1654-40c0-8428-aa209b6d8f29" />
+
+Administrator Dashboard
+<img width="1315" height="1166" alt="Dashboard" src="https://github.com/user-attachments/assets/f88de976-0a32-4c74-9553-90e0a6ce26b1" />
+
+Administrator Approvals Page
+<img width="1501" height="1284" alt="Claims" src="https://github.com/user-attachments/assets/b69d4079-8edc-4e37-9c68-c0a4d628f717" />
+
+New Claim Form
+<img width="1261" height="1117" alt="NewClaim" src="https://github.com/user-attachments/assets/d16884f0-f49d-497a-9f83-7e2c360c8eb6" />
 
 ---
 
