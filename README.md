@@ -7,6 +7,8 @@
 
 A robust web-based application designed to streamline the monthly contract claims process for lecturers. This system, built for the PROG6212 module, provides an intuitive interface for lecturers to log hours and for academic managers to review and approve claims efficiently.
 
+https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net
+
 ## Table of Contents
 * [Introduction](#introduction)
 * [Key Features](#key-features)
