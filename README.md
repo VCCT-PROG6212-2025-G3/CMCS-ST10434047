@@ -9,6 +9,17 @@ A robust web-based application designed to streamline the monthly contract claim
 
 https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net
 
+## Credentials:
+* Admin
+* ** Email: admin@cmcs.com
+* ** Password: 4A$eimaj
+* Program Coordinator
+* ** Email: programcoordinator@cmcs.com
+* ** Password: 4A$eimaj
+* Lecturer(Create your own account or use existing one below)
+* ** Email: jamieabrahams123234@gmail.com
+* ** Password: 4A$eimaj
+
 ## Table of Contents
 * [Introduction](#introduction)
 * [Key Features](#key-features)
