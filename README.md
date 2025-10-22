@@ -119,12 +119,6 @@ To get a local copy up and running, follow these simple steps.
 
 ---
 
-## Usage
-
-**Coming Soon**
-
----
-
 ## Contact
 
 *Jamie Abrahams* - *st10434047@vcconnect.edu.za*
