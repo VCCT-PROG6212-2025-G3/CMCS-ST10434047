@@ -36,7 +36,7 @@ namespace CMCS.Models
         public decimal Amount { get; set; }
 
         [StringLength(1000)]
-        public string AdditionalNotes { get; set; }
+        public string? AdditionalNotes { get; set; }
 
         public ClaimStatus Status { get; set; }
 

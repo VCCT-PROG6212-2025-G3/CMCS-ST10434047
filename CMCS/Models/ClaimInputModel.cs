@@ -15,13 +15,13 @@ namespace CMCS.Models
         [Range(1, 5000)]
         public decimal HourlyRate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please provide a detailed description of the claim.")]
         [StringLength(500, MinimumLength = 10)]
         public string Description { get; set; }
 
         [StringLength(1000)]
         [Display(Name = "Additional Notes (Optional)")]
-        public string AdditionalNotes { get; set; }
+        public string? AdditionalNotes { get; set; }
 
         public IFormFile Document { get; set; }
     }

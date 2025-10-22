@@ -15,11 +15,11 @@ namespace CMCS.Controllers
     [Authorize(Roles = "Lecturer")]
     public class LecturerAppController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDataContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public LecturerAppController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment hostEnvironment)
+        public LecturerAppController(IDataContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _userManager = userManager;
@@ -100,7 +100,7 @@ namespace CMCS.Controllers
                     HourlyRate = model.HourlyRate,
                     Amount = totalAmount,
                     Description = model.Description,
-                    AdditionalNotes = model.AdditionalNotes
+                    AdditionalNotes = model.AdditionalNotes ?? string.Empty
                 };
 
                 if (model.Document != null && model.Document.Length > 0)
@@ -121,7 +121,7 @@ namespace CMCS.Controllers
                 claim.SubmissionDate = DateTime.UtcNow;
                 claim.Status = ClaimStatus.Pending;
 
-                _context.Add(claim);
+                _context.Claims.Add(claim);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Claims));
