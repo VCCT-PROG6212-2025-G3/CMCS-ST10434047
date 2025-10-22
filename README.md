@@ -119,6 +119,31 @@ To get a local copy up and running, follow these simple steps.
 
 ---
 
+## Usage
+
+The application provides distinct portals for different user roles.
+
+### As a Lecturer
+1.  **Login or Register**: Use the provided lecturer credentials or register for a new account.
+2.  **View Dashboard**: Upon login, you are directed to your dashboard, which shows an overview of your recent claims and their statuses.
+3.  **Submit a Claim**: Navigate to the "My Claims" page and click "Submit New Claim".
+4.  **Complete the Form**: Fill in the hours worked, hourly rate, and a detailed description. You can also attach a supporting document (`.pdf`, `.docx`, `.xlsx`).
+5.  **Track Claims**: After submission, you can track the status of all your claims on the "My Claims" page. The status will change from `Pending` to `Approved` or `Rejected` after a coordinator reviews it.
+
+### As a Program Coordinator
+1.  **Login**: Use the provided Program Coordinator credentials.
+2.  **Manage Claims**: You will be directed to the claims management dashboard, which lists all submitted claims from lecturers.
+3.  **Review and Act**: For each claim with a `Pending` status, you can review the details. Click "Approve" or "Decline" to update the claim's status.
+4.  **View Details**: Click the "View" button to see the full details of any claim.
+
+### As an Administrator
+1.  **Login**: Use the provided Admin credentials.
+2.  **View System Overview**: The admin dashboard provides high-level analytics, including total claims by status and top-performing lecturers.
+3.  **User Management**: Navigate to the "Users" page to view all registered users and their assigned roles.
+4.  **Role Management**: You can edit a user's roles by clicking "Edit Roles" next to their name, allowing you to grant or revoke access to different parts of the system.
+
+---
+
 ## Contact
 
 *Jamie Abrahams* - *st10434047@vcconnect.edu.za*
