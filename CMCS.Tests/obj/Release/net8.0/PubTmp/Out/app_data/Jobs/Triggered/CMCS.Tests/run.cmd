@@ -1,0 +1,1 @@
+dotnet CMCS.Tests.dll %*

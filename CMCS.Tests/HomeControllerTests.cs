@@ -66,4 +66,36 @@ public class HomeControllerTests
         Assert.Equal("Index", redirectToActionResult.ActionName);
         Assert.Equal("AdminDashboard", redirectToActionResult.ControllerName);
     }
+
+    [Fact]
+    public async Task Index_UserIsLecturer_RedirectsToLecturerApp()
+    {
+        // Arrange
+        var user = new ApplicationUser { UserName = "lecturer@test.com", Id = "2" };
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new System.Security.Claims.Claim[]
+        {
+            new System.Security.Claims.Claim(ClaimTypes.Name, user.UserName),
+        }));
+
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = claimsPrincipal }
+        };
+
+        // Configure mocks to simulate a signed-in Lecturer
+        _mockSignInManager.Setup(s => s.IsSignedIn(claimsPrincipal)).Returns(true);
+        _mockUserManager.Setup(u => u.GetUserAsync(claimsPrincipal)).ReturnsAsync(user);
+        // Important to set up the other roles as false to test the if-else logic
+        _mockUserManager.Setup(u => u.IsInRoleAsync(user, "Admin")).ReturnsAsync(false);
+        _mockUserManager.Setup(u => u.IsInRoleAsync(user, "ProgramCoordinator")).ReturnsAsync(false);
+        _mockUserManager.Setup(u => u.IsInRoleAsync(user, "Lecturer")).ReturnsAsync(true);
+
+        // Act
+        var result = await _controller.Index();
+
+        // Assert
+        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal("Index", redirectToActionResult.ActionName);
+        Assert.Equal("LecturerApp", redirectToActionResult.ControllerName);
+    }
 }

@@ -70,4 +70,43 @@ public class LecturerAppControllerTests
         var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("Claims", redirectToActionResult.ActionName);
     }
+
+    [Fact]
+    public async Task NewClaim_Post_InvalidModel_ReturnsViewWithModelError()
+    {
+        // Arrange
+        var mockContext = new Mock<IDataContext>();
+        var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+        var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        var mockHostEnvironment = new Mock<IWebHostEnvironment>();
+
+        var controller = new LecturerAppController(
+            mockContext.Object,
+            mockUserManager.Object,
+            mockHostEnvironment.Object
+        );
+
+        // Add a model error to simulate what happens with invalid input (e.g., description too short)
+        controller.ModelState.AddModelError("Description", "The description must be at least 10 characters long.");
+
+        var invalidClaimInput = new ClaimInputModel
+        {
+            HoursWorked = 5,
+            HourlyRate = 20,
+            Description = "short" // This is invalid
+        };
+
+        // Act
+        var result = await controller.NewClaim(invalidClaimInput);
+
+        // Assert
+        // 1. Check that it returns the same view, not a redirect
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.False(viewResult.ViewData.ModelState.IsValid); // The model state should be invalid
+        Assert.Equal(invalidClaimInput, viewResult.Model); // It should pass the invalid model back to the view
+
+        // 2. Verify that NO database operations were attempted
+        mockContext.Verify(c => c.Claims.Add(It.IsAny<CMCS.Models.Claim>()), Times.Never());
+        mockContext.Verify(c => c.SaveChangesAsync(default), Times.Never());
+    }
 }

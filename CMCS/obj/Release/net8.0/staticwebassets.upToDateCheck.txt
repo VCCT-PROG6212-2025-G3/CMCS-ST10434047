@@ -58,5 +58,7 @@ wwwroot\lib\jquery\dist\jquery.js
 wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\uploads\54e61b0c-870f-4de9-b582-8c18b7ed20f0_Gravity Map Thesis.pdf
 wwwroot\uploads\72155653-c56f-4a1e-b2c3-1c8c9fe7b8e7_IIE VC BCAD0701 Year 1 Programme Assessment Schedule 2024 V8.pdf
 wwwroot\uploads\a7af9ea7-1159-44e7-9538-9f3c8015ca93_IIE VC and IIE MSA School of Computer Science Competition1729592091167.pdf
+wwwroot\uploads\e9a7e2eb-91bb-46a7-bd40-54caae26f96d_Gravity Map Thesis.pdf

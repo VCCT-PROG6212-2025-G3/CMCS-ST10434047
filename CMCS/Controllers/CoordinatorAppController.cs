@@ -12,9 +12,9 @@ namespace CMCS.Controllers
     [Authorize(Roles = "ProgramCoordinator")]
     public class CoordinatorAppController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDataContext _context;
 
-        public CoordinatorAppController(ApplicationDbContext context)
+        public CoordinatorAppController(IDataContext context)
         {
             _context = context;
         }
@@ -57,7 +57,6 @@ namespace CMCS.Controllers
             if (claim != null)
             {
                 claim.Status = newStatus;
-                _context.Update(claim);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
