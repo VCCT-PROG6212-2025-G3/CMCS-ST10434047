@@ -109,7 +109,7 @@ To get a local copy up and running, follow these simple steps.
     * An Azure SQL instance or local SQL Server
 2.  **Clone the repo**
     ```sh
-    git clone [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047.git](https://github.com/your_username/CMCS-ST10434047.git)
+    git clone [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047.git](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047.git))
     ```
 3.  **Configure the database**
     * Open `appsettings.json`.
@@ -130,4 +130,4 @@ To get a local copy up and running, follow these simple steps.
 *Jamie Abrahams* - *st10434047@vcconnect.edu.za*
 ST10434047
 
-Project Link: [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047](https://github.com/your_username/CMCS-ST10434047)
+Project Link: [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047)
