@@ -14,11 +14,11 @@ namespace CMCS.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminDashboardController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDataContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminDashboardController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminDashboardController(IDataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;

@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\jamie\\OneDrive\\Documents\\Work\\Varsity College\\Year 2\\Semester 2\\Programming\\POE\\CMCS\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{9A87946E-E195-46F9-84A2-D3BD5972B5D5}|CMCS.csproj|c:\\users\\jamie\\onedrive\\documents\\work\\varsity college\\year 2\\semester 2\\programming\\poe\\cmcs\\controllers\\lecturerappcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A87946E-E195-46F9-84A2-D3BD5972B5D5}|CMCS.csproj|solutionrelative:controllers\\lecturerappcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A87946E-E195-46F9-84A2-D3BD5972B5D5}|CMCS.csproj|c:\\users\\jamie\\onedrive\\documents\\work\\varsity college\\year 2\\semester 2\\programming\\poe\\cmcs\\models\\claim.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A87946E-E195-46F9-84A2-D3BD5972B5D5}|CMCS.csproj|solutionrelative:models\\claim.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,22 +9,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 385,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Claim.cs",
-              "DocumentMoniker": "C:\\Users\\jamie\\OneDrive\\Documents\\Work\\Varsity College\\Year 2\\Semester 2\\Programming\\POE\\CMCS\\Models\\Claim.cs",
-              "RelativeDocumentMoniker": "Models\\Claim.cs",
-              "ToolTip": "C:\\Users\\jamie\\OneDrive\\Documents\\Work\\Varsity College\\Year 2\\Semester 2\\Programming\\POE\\CMCS\\Models\\Claim.cs",
-              "RelativeToolTip": "Models\\Claim.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwB0AAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T14:12:35.554Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -61,19 +38,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LecturerAppController.cs",
-              "DocumentMoniker": "C:\\Users\\jamie\\OneDrive\\Documents\\Work\\Varsity College\\Year 2\\Semester 2\\Programming\\POE\\CMCS\\Controllers\\LecturerAppController.cs",
-              "RelativeDocumentMoniker": "Controllers\\LecturerAppController.cs",
-              "ToolTip": "C:\\Users\\jamie\\OneDrive\\Documents\\Work\\Varsity College\\Year 2\\Semester 2\\Programming\\POE\\CMCS\\Controllers\\LecturerAppController.cs",
-              "RelativeToolTip": "Controllers\\LecturerAppController.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAApwGYAAABLAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T14:10:00.347Z",
-              "EditorCaption": ""
             }
           ]
         }

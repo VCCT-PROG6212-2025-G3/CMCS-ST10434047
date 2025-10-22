@@ -44,7 +44,7 @@ public class LecturerAppControllerTests
 
         // 5. Simulate a logged-in user
         var user = new ApplicationUser { Id = "test-user-id", FirstName = "Test", LastName = "User" };
-        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, user.Id) }));
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[] { new System.Security.Claims.Claim(ClaimTypes.NameIdentifier, user.Id) }));
         controller.ControllerContext.HttpContext = new DefaultHttpContext { User = claimsPrincipal };
         mockUserManager.Setup(u => u.GetUserAsync(claimsPrincipal)).ReturnsAsync(user);
 
@@ -61,7 +61,7 @@ public class LecturerAppControllerTests
 
         // Assert
         // Verify that the Add method was called on the Claims DbSet exactly once
-        mockClaimsDbSet.Verify(db => db.Add(It.IsAny<Claim>()), Times.Once());
+        mockClaimsDbSet.Verify(db => db.Add(It.IsAny<CMCS.Models.Claim>()), Times.Once());
 
         // Verify that SaveChangesAsync was called on the context exactly once
         mockContext.Verify(c => c.SaveChangesAsync(default(CancellationToken)), Times.Once());
