@@ -9,6 +9,8 @@ A robust web-based application designed to streamline the monthly contract claim
 
 (https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)
 
+VIDEO PRESENTATION: https://youtu.be/kviag0wonsE
+
 ## 🔐 CMCS Login Credentials
 
 Use the following credentials to access the appropriate portal on the [CMCS Home Page](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/):
