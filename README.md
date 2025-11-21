@@ -8,7 +8,7 @@
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet?style=for-the-badge&logo=.net)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 [![Build Status](https://img.shields.io/badge/build-passed-brightgreen?style=for-the-badge)](http://localhost:5000)
 
-**[📖 Documentation](#documentation)** • **[🎥 Video Walkthrough](https://youtu.be/kviag0wonsE)** • **[🐛 Report Issue](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)**
+**[📖 Documentation](#documentation)** • **[🎥 Video Walkthrough](https://youtu.be/pQZPLl2T1r0)** • **[🐛 Report Issue](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)**
 
 ---
 
@@ -19,7 +19,7 @@
     <img src="https://img.youtube.com/vi/kviag0wonsE/maxresdefault.jpg" alt="CMCS Presentation" width="80%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
   </a>
   
-  **[▶️ Watch the Full Walkthrough](https://youtu.be/kviag0wonsE)**
+  **[▶️ Watch the Full Walkthrough](https://youtu.be/pQZPLl2T1r0)**
   
   *Discover the two-stage approval workflow, role-based security, and automated calculation features*
 </div>
