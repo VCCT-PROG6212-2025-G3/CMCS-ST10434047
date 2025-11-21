@@ -115,7 +115,7 @@ Password: Password123!
 ### 👨‍🏫 Lecturer
 ```
 Name: John Doe
-Email: lecturer@cmcs.com
+Email: lecturer@gmail.com
 Password: Password123!
 ```
 *Standard user access: submit claims, upload documents, track approval status*
