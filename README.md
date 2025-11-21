@@ -32,6 +32,12 @@
 
 CMCS transforms the chaotic process of managing monthly contract lecturer claims into a streamlined, automated workflow. Built for academic institutions using **ASP.NET Core MVC** and **Entity Framework Core**, this system ensures accuracy, accountability, and efficiency across the entire claims lifecycle.
 
+### ⚠️ Registration & Compliance Strategy
+This system implements a **Hybrid Registration Model** to strictly control user access while maintaining usability:
+> **"Registration constitutes a request for access, which is only granted once HR manually updates the Hourly Rate."**
+
+While the registration page allows users to create profiles, **claim submission functionality is hard-locked** by default. A lecturer cannot submit any claims until an HR Administrator explicitly validates the user and assigns a non-zero Hourly Rate in the administrative backend. This ensures no unauthorized claims can ever enter the system.
+
 ### The Challenge
 
 Traditional claim management faced critical issues:
@@ -71,17 +77,16 @@ A comprehensive digital platform featuring:
 <td width="50%">
 
 ### 🔧 **System Capabilities**
+- **Register + HR Approval Access Control**
 - Two-stage approval workflow
 - Automated payment calculations
 - Secure document management
 - Comprehensive audit trails
-- Role-based authorization
 - Excel/PDF report generation
 
 </td>
 </tr>
 </table>
-
 ---
 
 ## 🔑 Demo Credentials
