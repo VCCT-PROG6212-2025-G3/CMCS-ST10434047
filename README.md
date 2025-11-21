@@ -126,26 +126,6 @@ Password: Password123!
 
 ## 🏗️ System Architecture
 
-```mermaid
-graph TB
-    A[Lecturer] -->|Submit Claim| B[CMCS Web App]
-    B -->|Pending Verification| C[Programme Coordinator]
-    C -->|Verify & Approve| D[Academic Manager]
-    D -->|Final Approval| E[Payment Processing]
-    F[HR Admin] -->|Configure Rates| B
-    B -->|Store Data| G[SQL Server Database]
-    B -->|Upload Files| H[File Storage]
-    
-    style A fill:#e1f5ff
-    style B fill:#b8e0ff
-    style C fill:#fff4b8
-    style D fill:#ffe5b4
-    style E fill:#d4f4dd
-    style F fill:#ffd4d4
-    style G fill:#e8d4ff
-    style H fill:#ffe8d4
-```
-
 ### Technology Stack
 
 | Layer | Technologies |
@@ -156,6 +136,47 @@ graph TB
 | **Frontend** | Bootstrap 5, Chart.js, Font Awesome, jQuery |
 | **Cloud Platform** | Microsoft Azure (App Service) |
 | **File Storage** | Secure document upload with validation (.pdf, .docx, .xlsx) |
+
+### Approval Flow
+
+```
+┌─────────────┐
+│  Lecturer   │ Submits Claim + Documents
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────┐
+│ Auto-Calculate  │ System calculates total based on HR rates
+└────────┬────────┘
+         │
+         ▼
+   ┌──────────────────┐
+   │   Coordinator    │ Stage 1: Verification
+   │  (Verifies)      │
+   └────────┬─────────┘
+            │
+    ┌───────┴────────┐
+    │                │
+    ▼                ▼
+┌─────────┐    ┌──────────┐
+│ Reject  │    │ Approve  │
+│ (Revise)│    │ & Forward│
+└─────────┘    └────┬─────┘
+                    │
+                    ▼
+            ┌──────────────┐
+            │   Manager    │ Stage 2: Final Approval
+            │  (Approves)  │
+            └──────┬───────┘
+                   │
+           ┌───────┴────────┐
+           │                │
+           ▼                ▼
+      ┌─────────┐    ┌───────────┐
+      │ Reject  │    │  Approve  │
+      │(Revise) │    │(Payment)  │
+      └─────────┘    └───────────┘
+```
 
 ---
 
@@ -267,22 +288,195 @@ CMCS embraces **modern enterprise design**:
 
 ---
 
-## 🔐 Two-Stage Approval Workflow
+## 💼 User Workflows
 
-```mermaid
-sequenceDiagram
-    participant L as Lecturer
-    participant S as System
-    participant C as Coordinator
-    participant M as Manager
-    participant P as Payroll
+### For Lecturers 👨‍🏫
+1. **Login** with your credentials
+2. **Navigate** to "Submit Claim"
+3. **Enter** hours worked for the month
+4. **Upload** supporting documents (timesheets, contracts)
+5. **Review** auto-calculated payment amount
+6. **Submit** for verification
+7. **Track** claim status in real-time
 
-    L->>S: Submit Claim + Documents
-    S->>S: Auto-calculate Payment
-    S->>C: Notify Pending Verification
-    C->>S: Review Claim
-    
-    alt Verification Approved
-        C->>S: Verify & Forward
-        S->>M: Notify Pending Approval
-        M->>S: Review Verifie
+### For Programme Coordinators 📊
+1. **Access** "Pending Verification" dashboard
+2. **Review** lecturer submissions and documents
+3. **Verify** accuracy of hours and calculations
+4. **Approve** to forward to Academic Manager
+5. **Reject** with feedback if corrections needed
+6. **Monitor** verification metrics and trends
+
+### For Academic Managers 👔
+1. **View** "Pending Approval" queue
+2. **Review** coordinator-verified claims
+3. **Examine** historical claim patterns
+4. **Approve** for payment processing
+5. **Reject** if additional review needed
+6. **Generate** approval reports
+
+### For HR Administrators 👨‍💼
+1. **Manage** user accounts and roles
+2. **Configure** hourly rates per lecturer
+3. **View** system-wide analytics
+4. **Generate** payment reports
+5. **Export** data for payroll integration
+6. **Audit** claim history and approvals
+
+---
+
+## 📊 Key Capabilities
+
+### Automated Payment Calculation
+```
+Total Payment = Hours Worked × HR-Configured Hourly Rate
+```
+- Rates set by HR per lecturer
+- Real-time calculation preview
+- Server-side validation
+- Prevents manual entry errors
+
+### Document Management
+- Supported formats: PDF, DOCX, XLSX
+- Secure file upload and storage
+- Automatic file validation
+- Persistent storage with claims
+- Download capability for reviewers
+
+### Reporting & Analytics
+- Claim submission trends over time
+- Approval rate metrics by coordinator/manager
+- Payment totals by month/department
+- Export to Excel/PDF
+- Interactive Chart.js visualizations
+
+---
+
+## 🧪 Testing
+
+### Local Development
+```bash
+# Run the application
+dotnet run
+
+# Run with hot reload
+dotnet watch run
+
+# Build for production
+dotnet publish -c Release
+```
+
+### Production Deployment
+The application is deployed to **Azure App Service**:
+- Automatic scaling based on traffic
+- SSL/TLS certificates managed by Azure
+- Continuous deployment from GitHub
+- 99.9% uptime SLA
+
+---
+
+## 🔐 Security Features
+
+| Feature | Implementation |
+|:--------|:--------------|
+| **Authentication** | ASP.NET Core Identity with hashed passwords |
+| **Authorization** | Role-based access control (RBAC) |
+| **File Upload** | Type validation, size limits, virus scanning |
+| **Data Protection** | Encrypted connection strings, secure cookies |
+| **HTTPS** | Enforced in production with TLS 1.2+ |
+| **CSRF Protection** | Anti-forgery tokens on all forms |
+| **Audit Trail** | Comprehensive logging of all actions |
+
+---
+
+## 🗺️ Roadmap
+
+### Completed ✅
+- [x] Two-stage approval workflow
+- [x] Role-based authentication
+- [x] Automated payment calculations
+- [x] Document upload and management
+- [x] Interactive dashboards and reports
+- [x] Azure deployment
+- [x] Mobile-responsive design
+
+### Planned 📋
+- [ ] Email notifications for claim status changes
+- [ ] Bulk claim approval for managers
+- [ ] Advanced analytics with predictive insights
+- [ ] Mobile app (iOS/Android)
+- [ ] Integration with payroll systems
+- [ ] Multi-language support
+- [ ] Dark mode toggle
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+Please ensure your code follows the existing style and includes appropriate tests.
+
+---
+
+## 📄 License
+
+This project is developed for academic purposes as part of the **PROG6212** module at Varsity College.
+
+```
+Academic Use - You can:
+✅ Study the codebase
+✅ Learn from implementation
+✅ Use for educational projects
+✅ Modify for personal learning
+```
+
+---
+
+## 📞 Support & Contact
+
+<div align="center">
+
+### Need Help?
+
+[![GitHub Issues](https://img.shields.io/badge/Issues-Report%20Bug-red?style=for-the-badge&logo=github)](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)
+[![Video Demo](https://img.shields.io/badge/Video-Watch%20Demo-red?style=for-the-badge&logo=youtube)](https://youtu.be/kviag0wonsE)
+[![Live Demo](https://img.shields.io/badge/Demo-Try%20Live-blue?style=for-the-badge&logo=microsoft-azure)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)
+
+### Project Information
+
+**Student ID:** ST10434047  
+**Module:** PROG6212  
+**Institution:** Varsity College
+
+</div>
+
+---
+
+## 🙏 Acknowledgments
+
+- **Microsoft** for .NET 8 and Azure platform
+- **Bootstrap Team** for the responsive framework
+- **Chart.js** for interactive data visualizations
+- **Font Awesome** for the comprehensive icon library
+- **Entity Framework Core** for seamless database operations
+
+---
+
+<div align="center">
+
+### ⭐ Star this repo if you find it helpful!
+
+**Built for Academic Excellence**
+
+*Developed with ASP.NET Core 8 • Deployed on Azure • Designed for Efficiency*
+
+[⬆ Back to Top](#-contract-monthly-claim-system-cmcs)
+
+</div>
