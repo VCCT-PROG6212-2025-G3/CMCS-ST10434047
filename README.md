@@ -4,7 +4,7 @@
 
 ### *Streamlining Academic Claims with Modern Cloud Architecture*
 
-[![Live Demo](https://img.shields.io/badge/demo-live%20on%20azure-0089D6?style=for-the-badge&logo=microsoft-azure)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)
+[![Live Demo](https://img.shields.io/badge/demo-local%20on%20device-0089D6?style=for-the-badge&logo=microsoft-azure)]
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet?style=for-the-badge&logo=.net)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/)
 
