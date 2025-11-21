@@ -8,7 +8,7 @@
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet?style=for-the-badge&logo=.net)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/)
 
-**[🌐 Live Application](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)** • **[📖 Documentation](#documentation)** • **[🎥 Video Walkthrough](https://youtu.be/kviag0wonsE)** • **[🐛 Report Issue](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)**
+**[📖 Documentation](#documentation)** • **[🎥 Video Walkthrough](https://youtu.be/kviag0wonsE)** • **[🐛 Report Issue](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)**
 
 ---
 
