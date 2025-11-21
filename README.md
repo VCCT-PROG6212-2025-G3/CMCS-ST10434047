@@ -402,16 +402,13 @@ The application is deployed to **Azure App Service**:
 - [x] Automated payment calculations
 - [x] Document upload and management
 - [x] Interactive dashboards and reports
-- [x] Azure deployment
 - [x] Mobile-responsive design
 
 ### Planned 📋
 - [ ] Email notifications for claim status changes
 - [ ] Bulk claim approval for managers
 - [ ] Advanced analytics with predictive insights
-- [ ] Mobile app (iOS/Android)
 - [ ] Integration with payroll systems
-- [ ] Multi-language support
 - [ ] Dark mode toggle
 
 ---
