@@ -17,16 +17,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "8.0.x" # Make sure this matches your project's .NET version
 
       - name: Restore dependencies
-        # Run restore on the specific solution file
-        run: dotnet restore ./CMCS/CMCS.sln
+        run: dotnet restore
 
       - name: Build
-        # Build the solution file directly, --no-restore is more efficient
-        run: dotnet build ./CMCS/CMCS.sln --no-restore
+        run: dotnet build --no-restore
 
       - name: Test
-        # Test the solution file directly, --no-build is more efficient
-        run: dotnet test ./CMCS/CMCS.sln --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal

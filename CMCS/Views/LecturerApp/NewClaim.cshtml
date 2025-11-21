@@ -26,20 +26,28 @@
         <form asp-action="NewClaim" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="HoursWorked" class="form-label"></label>
-                    <input asp-for="HoursWorked" class="form-control" />
-                    <span asp-validation-for="HoursWorked" class="text-danger"></span>
+            <div class="mb-3">
+                <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
+                <input asp-for="HoursWorked" id="HoursWorked" class="form-control" oninput="calculateTotal()" />
+                <span asp-validation-for="HoursWorked" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="HourlyRate" class="form-label">Hourly Rate (Set by HR)</label>
+                <div class="input-group">
+                    <span class="input-group-text">R</span>
+                    <input asp-for="HourlyRate"
+                           class="form-control"
+                           readonly
+                           style="background-color: #e9ecef;"
+                           value="@Model.HourlyRate.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" />
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label asp-for="HourlyRate" class="form-label"></label>
-                    <div class="input-group">
-                        <span class="input-group-text">R</span>
-                        <input asp-for="HourlyRate" class="form-control" />
-                    </div>
-                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
-                </div>
+                <span asp-validation-for="HourlyRate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Total Claim Amount</label>
+                <h3 id="TotalDisplay" class="text-primary">R 0.00</h3>
             </div>
 
             <div class="mb-3">
@@ -67,6 +75,27 @@
         </form>
     </div>
 </div>
+
+<script>
+    function calculateTotal() {
+        // Get the values as strings
+        var hoursStr = document.getElementById('HoursWorked').value;
+        var rateStr = document.getElementById('HourlyRate').value;
+
+        // Replace commas with dots for calculation
+        var hours = parseFloat(hoursStr.replace(',', '.')) || 0;
+        var rate = parseFloat(rateStr.replace(',', '.')) || 0;
+
+        var total = hours * rate;
+
+        // Format back to currency (South African Rand)
+        document.getElementById('TotalDisplay').innerText =
+            new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(total);
+    }
+
+    // Trigger calculation immediately in case fields are pre-filled
+    document.addEventListener('DOMContentLoaded', calculateTotal);
+</script>
 
 @section Scripts {
     @{

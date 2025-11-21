@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMCS.Models
 {
-    public enum ClaimStatus { Pending, Approved, Rejected }
+    public enum ClaimStatus { Pending, Verified, Approved, Rejected }
 
     public class Claim
     {
@@ -22,7 +22,8 @@ namespace CMCS.Models
         public string Description { get; set; }
 
         [Required]
-        [Range(0, 1000)]
+        [Range(0.1, 1000)]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal HoursWorked { get; set; }
 
         [Required]

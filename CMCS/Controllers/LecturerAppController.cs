@@ -28,6 +28,10 @@ namespace CMCS.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserRole")))
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
             var user = await _userManager.GetUserAsync(User);
             var claims = await _context.Claims
                                        .Where(c => c.UserId == user.Id)
@@ -65,15 +69,45 @@ namespace CMCS.Controllers
             return View(claim);
         }
 
-        public IActionResult NewClaim()
+        [HttpGet]
+        public async Task<IActionResult> NewClaim()
         {
-            return View(new ClaimInputModel());
+            var user = await _userManager.GetUserAsync(User);
+
+            var model = new ClaimInputModel
+            {
+                HourlyRate = user.HourlyRate
+            };
+
+            if (model.HourlyRate <= 0)
+            {
+                ModelState.AddModelError("", "Your hourly rate has not been set by HR. Please contact them.");
+            }
+
+            return View(model);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NewClaim(ClaimInputModel model)
         {
+            var user = await _userManager.GetUserAsync(User);
+            model.HourlyRate = user.HourlyRate;
+            ModelState.Remove("HourlyRate");
+
+            // SERVER-SIDE VALIDATION (180 Hours Limit)
+            if (model.HoursWorked > 180)
+            {
+                ModelState.AddModelError("HoursWorked", "You cannot claim more than 180 hours in a month.");
+            }
+
+            if (model.HourlyRate <= 0)
+            {
+                ModelState.AddModelError("", "Your hourly rate has not been set by HR. Please contact support.");
+            }
+
+            // FILE UPLOAD HANDLING
             if (model.Document != null)
             {
                 var fileSizeLimit = 5 * 1024 * 1024; // 5 MB
@@ -96,11 +130,15 @@ namespace CMCS.Controllers
 
                 var claim = new Claim
                 {
+                    UserId = user.Id,
                     HoursWorked = model.HoursWorked,
                     HourlyRate = model.HourlyRate,
                     Amount = totalAmount,
                     Description = model.Description,
-                    AdditionalNotes = model.AdditionalNotes ?? string.Empty
+                    AdditionalNotes = model.AdditionalNotes ?? string.Empty,
+                    SubmissionDate = DateTime.UtcNow,
+                    Status = ClaimStatus.Pending,
+                    DocumentPath = ""
                 };
 
                 if (model.Document != null && model.Document.Length > 0)
@@ -115,11 +153,6 @@ namespace CMCS.Controllers
                     }
                     claim.DocumentPath = "/uploads/" + uniqueFileName;
                 }
-
-                var user = await _userManager.GetUserAsync(User);
-                claim.UserId = user.Id;
-                claim.SubmissionDate = DateTime.UtcNow;
-                claim.Status = ClaimStatus.Pending;
 
                 _context.Claims.Add(claim);
                 await _context.SaveChangesAsync();

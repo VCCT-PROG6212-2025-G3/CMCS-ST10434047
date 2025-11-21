@@ -38,8 +38,9 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Hourly Rate</th>
                         <th>Roles</th>
-                        <th></th>
+                        <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,9 +49,31 @@
                         <tr>
                             <td>@user.FirstName @user.LastName</td>
                             <td>@user.Email</td>
-                            <td>@string.Join(", ", user.Roles)</td>
+
+                            <td>
+                                <form asp-action="UpdateRate" method="post" class="d-flex gap-2 align-items-center">
+                                    <input type="hidden" name="userId" value="@user.UserId" />
+                                    <div class="input-group input-group-sm" style="width: 140px;">
+                                        <span class="input-group-text">R</span>
+                                        <input type="number" name="hourlyRate" value="@user.HourlyRate.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)" class="form-control" step="0.01" placeholder="0.00" />
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-save"></i> Save
+                                    </button>
+                                </form>
+                            </td>
+
+                            <td>
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="badge bg-secondary">@role</span>
+                                }
+                            </td>
+
                             <td class="text-end">
-                                <a asp-action="EditUserRoles" asp-route-userId="@user.UserId" class="btn btn-sm btn-outline-primary">Edit Roles</a>
+                                <a asp-action="EditUserRoles" asp-route-userId="@user.UserId" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-user-tag"></i> Roles
+                                </a>
                             </td>
                         </tr>
                     }

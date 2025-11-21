@@ -90,12 +90,27 @@ namespace CMCS.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
+                    // Set session variables
+                    HttpContext.Session.SetString("UserRole", "LoggedIn");
+                    HttpContext.Session.SetString("UserName", user.FirstName);
+
+                    // REDIRECTION LOGIC
                     if (await _userManager.IsInRoleAsync(user, "Admin"))
-                        return Redirect("/AdminDashboard");
+                    {
+                        return RedirectToAction("Index", "AdminDashboard");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "HR"))
+                    {
+                        return RedirectToAction("Index", "AdminDashboard");
+                    }
                     else if (await _userManager.IsInRoleAsync(user, "ProgramCoordinator"))
-                        return Redirect("/CoordinatorApp");
+                    {
+                        return RedirectToAction("Index", "CoordinatorApp");
+                    }
                     else if (await _userManager.IsInRoleAsync(user, "Lecturer"))
-                        return Redirect("/LecturerApp");
+                    {
+                        return RedirectToAction("Index", "LecturerApp");
+                    }
 
                     return LocalRedirect(returnUrl);
                 }

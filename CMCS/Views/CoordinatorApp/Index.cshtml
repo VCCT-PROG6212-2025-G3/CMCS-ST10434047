@@ -52,13 +52,18 @@
                                 {
                                     <form asp-action="UpdateStatus" method="post">
                                         <input type="hidden" name="claimId" value="@claim.Id" />
-                                        <input type="hidden" name="newStatus" value="@ClaimStatus.Approved" />
-                                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                        <input type="hidden" name="newStatus" value="@ClaimStatus.Verified" />
+                                        <button type="submit" class="btn btn-sm btn-warning text-dark">
+                                            <i class="fas fa-check"></i> Verify
+                                        </button>
                                     </form>
+
                                     <form asp-action="UpdateStatus" method="post">
                                         <input type="hidden" name="claimId" value="@claim.Id" />
                                         <input type="hidden" name="newStatus" value="@ClaimStatus.Rejected" />
-                                        <button type="submit" class="btn btn-sm btn-danger">Decline</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
                                     </form>
                                 }
                                 <a asp-controller="CoordinatorApp" asp-action="Details" asp-route-id="@claim.Id" class="btn btn-sm btn-outline-secondary">View</a>

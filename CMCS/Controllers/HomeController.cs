@@ -23,20 +23,31 @@ namespace CMCS.Controllers
             if (_signInManager.IsSignedIn(User))
             {
                 var user = await _userManager.GetUserAsync(User);
-                if (await _userManager.IsInRoleAsync(user!, "Admin"))
+
+                if (user != null)
                 {
-                    return RedirectToAction("Index", "AdminDashboard");
-                }
-                else if (await _userManager.IsInRoleAsync(user!, "ProgramCoordinator"))
-                {
-                    return RedirectToAction("Index", "CoordinatorApp");
-                }
-                else if (await _userManager.IsInRoleAsync(user!, "Lecturer"))
-                {
-                    return RedirectToAction("Index", "LecturerApp");
+                    if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserRole")))
+                    {
+                        HttpContext.Session.SetString("UserRole", "LoggedIn");
+                        HttpContext.Session.SetString("UserName", user.FirstName);
+                    }
+
+                    if (await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "HR"))
+                    {
+                        return RedirectToAction("Index", "AdminDashboard");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "ProgramCoordinator"))
+                    {
+                        return RedirectToAction("Index", "CoordinatorApp");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Lecturer"))
+                    {
+                        return RedirectToAction("Index", "LecturerApp");
+                    }
                 }
             }
 
+            // If not logged in, show the landing page
             ViewData["IsHomePage"] = true;
             return View();
         }

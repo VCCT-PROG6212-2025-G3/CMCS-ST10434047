@@ -22,9 +22,10 @@ namespace CMCS.Controllers
         public async Task<IActionResult> Index()
         {
             var claims = await _context.Claims
-                                       .Include(c => c.User)
-                                       .OrderByDescending(c => c.SubmissionDate)
-                                       .ToListAsync();
+                .Include(c => c.User)
+                .Where(c => c.Status == ClaimStatus.Pending)
+                .OrderByDescending(c => c.SubmissionDate)
+                .ToListAsync();
             return View(claims);
         }
 

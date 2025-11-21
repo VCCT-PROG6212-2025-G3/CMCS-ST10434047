@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CMCS.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,HR")]
     public class AdminDashboardController : Controller
     {
         private readonly IDataContext _context;
@@ -91,12 +91,52 @@ namespace CMCS.Controllers
                     UserId = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Email = user.Email,
+                    Email = user.Email ?? "",
+                    HourlyRate = user.HourlyRate,
                     Roles = await _userManager.GetRolesAsync(user)
                 });
             }
             return View(userViewModels);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRate(string userId, string hourlyRate)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID is required.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (decimal.TryParse(hourlyRate.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal parsedRate))
+            {
+                user.HourlyRate = parsedRate;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    TempData["Success"] = $"Rate updated to R{parsedRate:F2}";
+                }
+                else
+                {
+                    TempData["Error"] = "Database update failed.";
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Invalid number format.";
+            }
+
+            return RedirectToAction(nameof(ManageUsers));
+        }
+
 
         public async Task<IActionResult> EditUserRoles(string userId)
         {
@@ -161,6 +201,48 @@ namespace CMCS.Controllers
         {
             var roles = await _roleManager.Roles.ToListAsync();
             return View(roles);
+        }
+
+        // GET: View claims waiting for final approval
+        public async Task<IActionResult> ViewClaims()
+        {
+            var claims = await _context.Claims
+                .Include(c => c.User)
+                .Where(c => c.Status == ClaimStatus.Verified)
+                .OrderBy(c => c.SubmissionDate)
+                .ToListAsync();
+
+            return View(claims);
+        }
+
+        // POST: Final Approval
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveClaim(int claimId)
+        {
+            var claim = await _context.Claims.FindAsync(claimId);
+            if (claim != null)
+            {
+                claim.Status = ClaimStatus.Approved; // Final Status
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Claim approved successfully.";
+            }
+            return RedirectToAction(nameof(ViewClaims));
+        }
+
+        // POST: Reject
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RejectClaim(int claimId)
+        {
+            var claim = await _context.Claims.FindAsync(claimId);
+            if (claim != null)
+            {
+                claim.Status = ClaimStatus.Rejected;
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Claim rejected.";
+            }
+            return RedirectToAction(nameof(ViewClaims));
         }
     }
 }

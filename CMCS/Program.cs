@@ -28,6 +28,13 @@ namespace CMCS
                 googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
                 googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
             });
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -53,7 +60,7 @@ namespace CMCS
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -67,9 +74,11 @@ namespace CMCS
         public static async Task CreateRolesAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = ["Admin", "ProgramCoordinator", "Lecturer"];
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            // Create roles first
+            // 1. Add "HR" to the roles list as per Part 3 Requirements
+            string[] roleNames = { "Admin", "ProgramCoordinator", "Lecturer", "HR" };
+
             foreach (var roleName in roleNames)
             {
                 if (!await roleManager.RoleExistsAsync(roleName))
@@ -78,19 +87,27 @@ namespace CMCS
                 }
             }
 
-            // Assign Admin role to specific user
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var adminUser = await userManager.FindByEmailAsync("admin@cmcs.com");
-            var programCoordinatorUser = await userManager.FindByEmailAsync("programcoordinator@cmcs.com");
+            // 2. Create the HR Super User automatically
+            var hrEmail = "hr@cmcs.com";
+            var hrUser = await userManager.FindByEmailAsync(hrEmail);
 
-            if (programCoordinatorUser != null && !await userManager.IsInRoleAsync(programCoordinatorUser, "ProgramCoordinator"))
+            if (hrUser == null)
             {
-                await userManager.AddToRoleAsync(programCoordinatorUser, "ProgramCoordinator");
-            }
+                hrUser = new ApplicationUser
+                {
+                    UserName = hrEmail,
+                    Email = hrEmail,
+                    FirstName = "System",
+                    LastName = "Administrator",
+                    EmailConfirmed = true,
+                    HourlyRate = 0 // HR doesn't need a rate
+                };
 
-            if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
-            {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
+                // Create user with a default password
+                await userManager.CreateAsync(hrUser, "Password123!");
+
+                // Assign HR role
+                await userManager.AddToRoleAsync(hrUser, "HR");
             }
         }
     }

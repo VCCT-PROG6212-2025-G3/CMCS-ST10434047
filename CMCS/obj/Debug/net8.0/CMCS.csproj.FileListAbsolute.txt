@@ -295,3 +295,4 @@ C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Program
 C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS\bin\Debug\net8.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS\obj\Debug\net8.0\swae.build.ex.cache

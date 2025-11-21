@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "Final Approval";
+}
+
+<div class="container-fluid" style="max-width: 1400px; padding: 40px 24px;">
+    <h1 class="mb-4">Claims Awaiting Final Approval</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No verified claims waiting for approval.</div>
+    }
+    else
+    {
+        <div class="card shadow border-0 p-4">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Lecturer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Current Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.User.FirstName @item.User.LastName</td>
+                            <td>@item.SubmissionDate.ToShortDateString()</td>
+                            <td>@item.Amount.ToString("C")</td>
+                            <td><span class="badge bg-info text-dark">@item.Status</span></td>
+                            <td>
+                                <form asp-action="ApproveClaim" method="post" style="display:inline;">
+                                    <input type="hidden" name="claimId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-check-double"></i> Final Approve
+                                    </button>
+                                </form>
+                                <form asp-action="RejectClaim" method="post" style="display:inline;">
+                                    <input type="hidden" name="claimId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

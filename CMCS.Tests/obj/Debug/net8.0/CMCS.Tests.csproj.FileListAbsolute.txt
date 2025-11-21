@@ -368,3 +368,4 @@ C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Program
 C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS.Tests\obj\Debug\net8.0\CMCS.Tests.pdb
 C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS.Tests\obj\Debug\net8.0\CMCS.Tests.genruntimeconfig.cache
 C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS.Tests\obj\Debug\net8.0\ref\CMCS.Tests.dll
+C:\Users\jamie\OneDrive\Documents\Work\Varsity College\Year 2\Semester 2\Programming\POE\CMCS.Tests\bin\Debug\net8.0\Settings.job
