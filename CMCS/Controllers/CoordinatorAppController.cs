@@ -21,11 +21,13 @@ namespace CMCS.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var claims = await _context.Claims
-                .Include(c => c.User)
-                .Where(c => c.Status == ClaimStatus.Pending)
-                .OrderByDescending(c => c.SubmissionDate)
-                .ToListAsync();
+            var claims = await _context.Claims.Include(c => c.User).Where(c => c.Status == ClaimStatus.Pending).OrderByDescending(c => c.SubmissionDate).ToListAsync();
+
+            // Stats for the top cards
+            ViewData["TotalPending"] = claims.Count;
+            ViewData["TotalVerified"] = await _context.Claims.CountAsync(c => c.Status == ClaimStatus.Verified);
+            ViewData["TotalRejected"] = await _context.Claims.CountAsync(c => c.Status == ClaimStatus.Rejected);
+
             return View(claims);
         }
 
@@ -61,6 +63,37 @@ namespace CMCS.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Reports()
+        {
+            var claims = await _context.Claims.ToListAsync();
+
+            var totalClaims = claims.Count;
+            var verifiedClaims = claims.Count(c => c.Status == ClaimStatus.Verified);
+            var approvedClaims = claims.Count(c => c.Status == ClaimStatus.Approved);
+            var rejectedClaims = claims.Count(c => c.Status == ClaimStatus.Rejected);
+
+            var chartLabels = new List<string> { "Pending", "Verified", "Approved", "Rejected" };
+            var chartData = new List<decimal> {
+                claims.Count(c => c.Status == ClaimStatus.Pending),
+                verifiedClaims,
+                approvedClaims,
+                rejectedClaims
+            };
+
+            var viewModel = new LecturerReportViewModel
+            {
+                TotalClaimsSubmitted = totalClaims,
+                ApprovedClaims = verifiedClaims,
+                ApprovalRate = totalClaims > 0 ? (double)verifiedClaims / totalClaims * 100 : 0,
+                TotalAmountClaimed = claims.Sum(c => c.Amount),
+                TotalAmountApproved = claims.Where(c => c.Status == ClaimStatus.Verified || c.Status == ClaimStatus.Approved).Sum(c => c.Amount),
+                ChartLabels = chartLabels,
+                ChartData = chartData
+            };
+
+            return View(viewModel);
         }
     }
 }

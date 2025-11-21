@@ -161,7 +161,11 @@
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link-custom @(currentAction == "Index" ? "active" : "")" asp-action="Index"><i class="fas fa-tasks"></i> Claims</a></li>
-                        <li class="nav-item"><a class="nav-link-custom" href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link-custom @(currentAction == "Reports" ? "active" : "")" asp-action="Reports">
+                                <i class="fas fa-chart-bar"></i> Reports
+                            </a>
+                        </li>
                     </ul>
                     <div class="profile-dropdown" id="profileDropdown">
                         <div class="profile-summary">

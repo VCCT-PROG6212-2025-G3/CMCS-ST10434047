@@ -3,52 +3,412 @@
     ViewData["Title"] = "Final Approval";
 }
 
-<div class="container-fluid" style="max-width: 1400px; padding: 40px 24px;">
-    <h1 class="mb-4">Claims Awaiting Final Approval</h1>
+<style>
+    :root {
+        --primary-blue: #4F46E5;
+        --primary-light: #EEF2FF;
+        --success: #10B981;
+        --success-light: #D1FAE5;
+        --danger: #EF4444;
+        --danger-light: #FEE2E2;
+        --neutral-50: #F9FAFB;
+        --neutral-200: #E5E7EB;
+        --neutral-600: #4B5563;
+        --neutral-900: #111827;
+    }
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info">No verified claims waiting for approval.</div>
+    .page-wrapper {
+        padding: 40px 24px;
+        background: var(--neutral-50);
+        min-height: calc(100vh - 65px);
     }
-    else
-    {
-        <div class="card shadow border-0 p-4">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Lecturer</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Current Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.User.FirstName @item.User.LastName</td>
-                            <td>@item.SubmissionDate.ToShortDateString()</td>
-                            <td>@item.Amount.ToString("C")</td>
-                            <td><span class="badge bg-info text-dark">@item.Status</span></td>
-                            <td>
-                                <form asp-action="ApproveClaim" method="post" style="display:inline;">
-                                    <input type="hidden" name="claimId" value="@item.Id" />
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="fas fa-check-double"></i> Final Approve
-                                    </button>
-                                </form>
-                                <form asp-action="RejectClaim" method="post" style="display:inline;">
-                                    <input type="hidden" name="claimId" value="@item.Id" />
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fas fa-times"></i> Reject
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+
+    .page-header {
+        margin-bottom: 32px;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--neutral-900);
+        margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+        color: var(--neutral-600);
+        font-size: 1rem;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--neutral-200);
+        overflow: hidden;
+    }
+
+    /* Table Styles */
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table thead th {
+            background: var(--neutral-50);
+            color: var(--neutral-600);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .table tbody td {
+            padding: 20px 24px;
+            color: var(--neutral-900);
+            font-size: 0.95rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* Avatar */
+    .avatar-circle {
+        width: 36px;
+        height: 36px;
+        background: var(--primary-light);
+        color: var(--primary-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 12px;
+    }
+
+    .lecturer-info {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        gap: 6px;
+    }
+
+        .status-badge.verified {
+            background: var(--primary-light);
+            color: var(--primary-blue);
+        }
+
+    /* Action Buttons */
+    .btn-action {
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .btn-approve {
+        background: var(--success-light);
+        color: #065F46;
+    }
+
+        .btn-approve:hover {
+            background: #A7F3D0;
+            transform: translateY(-1px);
+        }
+
+    .btn-reject {
+        background: var(--danger-light);
+        color: #991B1B;
+    }
+
+        .btn-reject:hover {
+            background: #FECACA;
+            transform: translateY(-1px);
+        }
+
+    /* Modal Styles */
+    .modal-content-clean {
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: visible;
+    }
+
+    .modal-header-strip {
+        height: 8px;
+        width: 100%;
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+    }
+
+    .strip-approve {
+        background: linear-gradient(90deg, #10B981, #34D399);
+    }
+
+    .strip-reject {
+        background: linear-gradient(90deg, #EF4444, #F87171);
+    }
+
+    .modal-icon-box {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: -40px auto 20px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 10;
+    }
+
+        .modal-icon-box i {
+            font-size: 2rem;
+        }
+
+    .icon-approve {
+        color: var(--success);
+        background: var(--success-light);
+    }
+
+    .icon-reject {
+        color: var(--danger);
+        background: var(--danger-light);
+    }
+
+    .claim-summary-ticket {
+        background: #F9FAFB;
+        border: 1px dashed #D1D5DB;
+        border-radius: 12px;
+        padding: 16px;
+        margin: 20px 0;
+        text-align: left;
+    }
+
+    .ticket-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        color: var(--neutral-600);
+    }
+
+        .ticket-row.total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #E5E7EB;
+            color: var(--neutral-900);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 16px;
+        border: 1px dashed var(--neutral-200);
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: var(--neutral-200);
+        margin-bottom: 16px;
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+
+        <div class="page-header">
+            <h1 class="page-title">Final Approval Queue</h1>
+            <p class="page-subtitle">Review and finalize verified claims for payment processing.</p>
         </div>
-    }
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="fw-bold text-dark">All Caught Up!</h3>
+                <p class="text-muted">There are no verified claims waiting for final approval.</p>
+            </div>
+        }
+        else
+        {
+            <div class="dashboard-card">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Lecturer</th>
+                                <th>Submission Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="lecturer-info">
+                                            <div class="avatar-circle">
+                                                @(item.User.FirstName.Substring(0, 1))@(item.User.LastName.Substring(0, 1))
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">@item.User.FirstName @item.User.LastName</div>
+                                                <div class="text-muted small">Lecturer</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@item.SubmissionDate.ToString("MMM dd, yyyy")</td>
+                                    <td class="fw-bold text-dark">@item.Amount.ToString("C")</td>
+                                    <td>
+                                        <span class="status-badge verified">
+                                            <i class="fas fa-check-circle"></i> @item.Status
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button onclick="openModal('approve', @item.Id, '@item.User.FirstName @item.User.LastName', '@item.Amount.ToString("C")')"
+                                                    class="btn-action btn-approve">
+                                                <i class="fas fa-check-double"></i> Final Approve
+                                            </button>
+
+                                            <button onclick="openModal('reject', @item.Id, '@item.User.FirstName @item.User.LastName', '@item.Amount.ToString("C")')"
+                                                    class="btn-action btn-reject">
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-clean">
+            <div id="modalStrip" class="modal-header-strip strip-approve"></div>
+
+            <div class="modal-body px-4 pb-4 text-center">
+
+                <div class="modal-icon-box" id="modalIconBox">
+                    <i id="modalIcon" class="fas fa-check"></i>
+                </div>
+
+                <h3 id="modalTitle" class="fw-bold text-dark mb-2">Approve Payment</h3>
+                <p id="modalSubtext" class="text-muted mb-4">Are you sure you want to approve this claim for final payment?</p>
+
+                <div class="claim-summary-ticket">
+                    <div class="ticket-row">
+                        <span>Claim ID</span>
+                        <span class="font-monospace" id="modalDisplayId">#00000</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span>Lecturer</span>
+                        <span id="modalDisplayLecturer">John Doe</span>
+                    </div>
+                    <div class="ticket-row total">
+                        <span>Total Amount</span>
+                        <span class="text-primary" id="modalDisplayAmount">R 0.00</span>
+                    </div>
+                </div>
+
+                <form id="modalForm" method="post">
+                    <input type="hidden" name="claimId" id="modalClaimId" />
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" id="modalSubmitBtn" class="btn btn-primary py-2 fw-bold">Confirm Approval</button>
+                        <button type="button" class="btn btn-light py-2 fw-bold text-muted" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(action, id, lecturer, amount) {
+        // Initialize Modal
+        const modalEl = document.getElementById('actionModal');
+        const modal = new bootstrap.Modal(modalEl);
+
+        // Basic Data
+        document.getElementById('modalClaimId').value = id;
+        document.getElementById('modalDisplayId').innerText = '#' + id.toString().padStart(5, '0');
+        document.getElementById('modalDisplayLecturer').innerText = lecturer;
+        document.getElementById('modalDisplayAmount').innerText = amount;
+
+        // UI Elements
+        const form = document.getElementById('modalForm');
+        const strip = document.getElementById('modalStrip');
+        const iconBox = document.getElementById('modalIconBox');
+        const icon = document.getElementById('modalIcon');
+        const title = document.getElementById('modalTitle');
+        const subtext = document.getElementById('modalSubtext');
+        const submitBtn = document.getElementById('modalSubmitBtn');
+
+        // Configure for Action
+        if (action === 'approve') {
+            // SET ACTION URL FOR APPROVAL
+            form.action = '@Url.Action("ApproveClaim", "AdminDashboard")';
+
+            // Styling
+            strip.className = 'modal-header-strip strip-approve';
+            iconBox.className = 'modal-icon-box icon-approve';
+            icon.className = 'fas fa-check-double';
+
+            // Text
+            title.innerText = 'Final Approval';
+            subtext.innerText = 'This will mark the claim as Approved and ready for payroll. This action cannot be undone.';
+            submitBtn.className = 'btn btn-success py-2 fw-bold';
+            submitBtn.innerText = 'Confirm Final Approval';
+        } else {
+            // SET ACTION URL FOR REJECTION
+            form.action = '@Url.Action("RejectClaim", "AdminDashboard")';
+
+            // Styling
+            strip.className = 'modal-header-strip strip-reject';
+            iconBox.className = 'modal-icon-box icon-reject';
+            icon.className = 'fas fa-times';
+
+            // Text
+            title.innerText = 'Reject Claim';
+            subtext.innerText = 'Are you sure you want to reject this claim? The lecturer will be notified.';
+            submitBtn.className = 'btn btn-danger py-2 fw-bold';
+            submitBtn.innerText = 'Confirm Rejection';
+        }
+
+        modal.show();
+    }
+</script>

@@ -1,90 +1,476 @@
 ﻿@model IEnumerable<CMCS.Models.Claim>
 
 @{
-    ViewData["Title"] = "Claims Management";
+    ViewData["Title"] = "Coordinator Dashboard";
 }
 
 <style>
+    :root {
+        --primary-blue: #4F46E5;
+        --primary-light: #EEF2FF;
+        --success: #10B981;
+        --warning: #F59E0B;
+        --danger: #EF4444;
+        --danger-light: #FEE2E2;
+        --text-dark: #111827;
+        --text-muted: #6B7280;
+    }
+
     .dashboard-wrapper {
         padding: 40px 24px;
+        background: #F9FAFB;
+        min-height: 100vh;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    .dashboard-card {
+    /* --- Stats Cards --- */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
         padding: 24px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-left: 5px solid transparent;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .action-buttons form {
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.pending {
+            border-left-color: var(--warning);
+        }
+
+        .stat-card.verified {
+            border-left-color: var(--primary-blue);
+        }
+
+        .stat-card.rejected {
+            border-left-color: var(--danger);
+        }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .stat-card.pending .stat-icon {
+        background: #FEF3C7;
+        color: var(--warning);
+    }
+
+    .stat-card.verified .stat-icon {
+        background: var(--primary-light);
+        color: var(--primary-blue);
+    }
+
+    .stat-card.rejected .stat-icon {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+    /* --- Main Table Card --- */
+    .glass-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #E5E7EB;
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+        .table-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    /* --- Table Actions --- */
+    .btn-action {
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-right: 4px;
+    }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+    .btn-verify {
+        background: var(--primary-light);
+        color: var(--primary-blue);
+    }
+
+        .btn-verify:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+    .btn-reject {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+        .btn-reject:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+    .btn-view {
+        background: #F3F4F6;
+        color: #4B5563;
+        border: 1px solid #E5E7EB;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-decoration: none;
         display: inline-block;
-        margin-right: 5px;
+    }
+
+        .btn-view:hover {
+            background: #E5E7EB;
+            color: var(--text-dark);
+        }
+
+    /* --- NEW VISUAL MODAL STYLES --- */
+    .modal-backdrop.show {
+        background-color: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(8px);
+    }
+
+    .modal-content-clean {
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        /* FIX: Changed hidden to visible so the icon isn't cut off */
+        overflow: visible;
+        animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        margin-top: 30px; /* Ensure space at top of screen */
+    }
+
+    @@keyframes modalPop {
+        from {
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Header Coloring */
+    .modal-header-strip {
+        height: 8px;
+        width: 100%;
+        /* FIX: Added border radius to match modal since overflow is now visible */
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+    }
+
+    .strip-verify {
+        background: linear-gradient(90deg, #4F46E5, #818CF8);
+    }
+
+    .strip-reject {
+        background: linear-gradient(90deg, #EF4444, #F87171);
+    }
+
+    /* Icon Animation */
+    .modal-icon-box {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: -40px auto 20px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 10;
+    }
+
+        .modal-icon-box i {
+            font-size: 2rem;
+        }
+
+    .icon-verify {
+        color: var(--primary-blue);
+        background: var(--primary-light);
+    }
+
+    .icon-reject {
+        color: var(--danger);
+        background: var(--danger-light);
+    }
+
+    /* Summary Ticket */
+    .claim-summary-ticket {
+        background: #F9FAFB;
+        border: 1px dashed #D1D5DB;
+        border-radius: 12px;
+        padding: 16px;
+        margin: 20px 0;
+        text-align: left;
+    }
+
+    .ticket-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+        .ticket-row.total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #E5E7EB;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+    .modal-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 20px;
     }
 </style>
 
 <div class="dashboard-wrapper">
     <div class="container-fluid" style="max-width: 1400px;">
-        <h1 class="mb-4">Claims Management Dashboard</h1>
 
-        <div class="dashboard-card">
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Claim ID</th>
-                        <th>Lecturer</th>
-                        <th>Date Submitted</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var claim in Model)
-                    {
+        <div class="mb-5">
+            <h1 class="fw-bold text-dark">Verification Dashboard</h1>
+            <p class="text-muted">Review and verify lecturer claims pending approval.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card pending">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div>
+                    <h3 class="fw-bold m-0">@ViewData["TotalPending"]</h3>
+                    <small class="text-muted">Pending Review</small>
+                </div>
+            </div>
+            <div class="stat-card verified">
+                <div class="stat-icon"><i class="fas fa-check-double"></i></div>
+                <div>
+                    <h3 class="fw-bold m-0">@ViewData["TotalVerified"]</h3>
+                    <small class="text-muted">Verified This Month</small>
+                </div>
+            </div>
+            <div class="stat-card rejected">
+                <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                <div>
+                    <h3 class="fw-bold m-0">@ViewData["TotalRejected"]</h3>
+                    <small class="text-muted">Rejected</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="table-header">
+                <h2>Pending Claims</h2>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3 text-muted" style="font-size: 3rem;"><i class="fas fa-check-circle"></i></div>
+                    <h4>All Caught Up!</h4>
+                    <p class="text-muted">There are no pending claims to verify at this time.</p>
+                </div>
+            }
+            else
+            {
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td>#@claim.Id</td>
-                            <td>@claim.User.FirstName @claim.User.LastName</td>
-                            <td>@claim.SubmissionDate.ToShortDateString()</td>
-                            <td>@claim.Amount.ToString("C")</td>
-                            <td><span class="badge bg-@GetStatusBadgeClass(claim.Status)">@claim.Status.ToString()</span></td>
-                            <td class="text-center action-buttons">
-                                @if (claim.Status == ClaimStatus.Pending)
-                                {
-                                    <form asp-action="UpdateStatus" method="post">
-                                        <input type="hidden" name="claimId" value="@claim.Id" />
-                                        <input type="hidden" name="newStatus" value="@ClaimStatus.Verified" />
-                                        <button type="submit" class="btn btn-sm btn-warning text-dark">
+                            <th>Claim ID</th>
+                            <th>Lecturer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold text-primary">#@claim.Id.ToString().PadLeft(5, '0')</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center fw-bold text-secondary" style="width: 32px; height: 32px;">
+                                            @claim.User.FirstName.Substring(0, 1)
+                                        </div>
+                                        <div>@claim.User.FirstName @claim.User.LastName</div>
+                                    </div>
+                                </td>
+                                <td>@claim.SubmissionDate.ToString("MMM dd, yyyy")</td>
+                                <td class="fw-bold">@claim.Amount.ToString("C")</td>
+                                <td><span class="status-badge"><i class="fas fa-clock me-1"></i> Pending</span></td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button onclick="openModal('verify', @claim.Id, '@claim.User.FirstName @claim.User.LastName', '@claim.Amount.ToString("C")')" class="btn-action btn-verify">
                                             <i class="fas fa-check"></i> Verify
                                         </button>
-                                    </form>
-
-                                    <form asp-action="UpdateStatus" method="post">
-                                        <input type="hidden" name="claimId" value="@claim.Id" />
-                                        <input type="hidden" name="newStatus" value="@ClaimStatus.Rejected" />
-                                        <button type="submit" class="btn btn-sm btn-danger">
+                                        <button onclick="openModal('reject', @claim.Id, '@claim.User.FirstName @claim.User.LastName', '@claim.Amount.ToString("C")')" class="btn-action btn-reject">
                                             <i class="fas fa-times"></i> Reject
                                         </button>
-                                    </form>
-                                }
-                                <a asp-controller="CoordinatorApp" asp-action="Details" asp-route-id="@claim.Id" class="btn btn-sm btn-outline-secondary">View</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                        <a asp-action="Details" asp-route-id="@claim.Id" class="btn-view">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 </div>
 
-@{
-    string GetStatusBadgeClass(ClaimStatus status)
-    {
-        return status switch
-        {
-            ClaimStatus.Pending => "warning text-dark",
-            ClaimStatus.Approved => "success",
-            ClaimStatus.Rejected => "danger",
-            _ => "secondary",
-        };
+<div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-clean">
+            <div id="modalStrip" class="modal-header-strip strip-verify"></div>
+
+            <div class="modal-body px-4 pb-4 text-center">
+                <div class="modal-icon-box" id="modalIconBox">
+                    <i id="modalIcon" class="fas fa-check"></i>
+                </div>
+
+                <h3 id="modalTitle" class="fw-bold text-dark mb-2">Approve Claim</h3>
+                <p id="modalSubtext" class="text-muted mb-4">Are you sure you want to approve this claim for payment?</p>
+
+                <div class="claim-summary-ticket">
+                    <div class="ticket-row">
+                        <span>Claim ID</span>
+                        <span class="font-monospace" id="modalDisplayId">#00000</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span>Lecturer</span>
+                        <span id="modalDisplayLecturer">John Doe</span>
+                    </div>
+                    <div class="ticket-row total">
+                        <span>Total Amount</span>
+                        <span class="text-primary" id="modalDisplayAmount">R 0.00</span>
+                    </div>
+                </div>
+
+                <form asp-action="UpdateStatus" method="post">
+                    <input type="hidden" name="claimId" id="modalClaimId" />
+                    <input type="hidden" name="newStatus" id="modalNewStatus" />
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-light py-2 fw-bold text-muted" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" id="modalSubmitBtn" class="btn btn-primary py-2 fw-bold">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(action, id, lecturer, amount) {
+        // Initialize Bootstrap Modal
+        const modalEl = document.getElementById('actionModal');
+        const modal = new bootstrap.Modal(modalEl);
+
+        // 1. Set Basic Data
+        document.getElementById('modalClaimId').value = id;
+        document.getElementById('modalDisplayId').innerText = '#' + id.toString().padStart(5, '0');
+        document.getElementById('modalDisplayLecturer').innerText = lecturer;
+        document.getElementById('modalDisplayAmount').innerText = amount;
+
+        // 2. Get Element References
+        const strip = document.getElementById('modalStrip');
+        const iconBox = document.getElementById('modalIconBox');
+        const icon = document.getElementById('modalIcon');
+        const title = document.getElementById('modalTitle');
+        const subtext = document.getElementById('modalSubtext');
+        const submitBtn = document.getElementById('modalSubmitBtn');
+        const statusInput = document.getElementById('modalNewStatus');
+
+        // 3. Configure UI based on Action
+        if (action === 'verify') {
+            // --- VERIFY STATE ---
+            statusInput.value = 'Verified';
+
+            // Styling
+            strip.className = 'modal-header-strip strip-verify';
+            iconBox.className = 'modal-icon-box icon-verify';
+            icon.className = 'fas fa-check';
+
+            // Text
+            title.innerText = 'Verify Claim';
+            subtext.innerText = 'This claim will be forwarded to HR for final processing.';
+
+            // Button
+            submitBtn.className = 'btn btn-primary py-2 fw-bold w-100';
+            submitBtn.innerText = 'Confirm Verification';
+
+        } else {
+            // --- REJECT STATE ---
+            statusInput.value = 'Rejected';
+
+            // Styling
+            strip.className = 'modal-header-strip strip-reject';
+            iconBox.className = 'modal-icon-box icon-reject';
+            icon.className = 'fas fa-exclamation-triangle';
+
+            // Text
+            title.innerText = 'Reject Claim';
+            subtext.innerText = 'Are you sure you want to reject this claim? This action cannot be undone.';
+
+            // Button
+            submitBtn.className = 'btn btn-danger py-2 fw-bold w-100';
+            submitBtn.innerText = 'Confirm Rejection';
+        }
+
+        modal.show();
     }
-}
+</script>

@@ -1,0 +1,95 @@
+﻿@model CMCS.Models.LecturerReportViewModel
+@using System.Text.Json;
+
+@{
+    ViewData["Title"] = "Claims Report";
+}
+
+<style>
+    .report-wrapper {
+        padding: 40px 24px;
+    }
+
+    .report-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        height: 100%;
+    }
+</style>
+
+<div class="report-wrapper">
+    <div class="container-fluid" style="max-width: 1400px;">
+        <h1 class="mb-4 fw-bold">Claims Overview Report</h1>
+
+        <!-- Summary Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="report-card text-center">
+                    <h2 class="fw-bold text-primary">@Model.TotalClaimsSubmitted</h2>
+                    <p class="text-muted">Total Claims</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="report-card text-center">
+                    <h2 class="fw-bold text-success">@Model.ApprovedClaims</h2>
+                    <p class="text-muted">Verified Claims</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="report-card text-center">
+                    <h2 class="fw-bold text-dark">@Model.TotalAmountClaimed.ToString("C")</h2>
+                    <p class="text-muted">Total Value</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="report-card text-center">
+                    <h2 class="fw-bold text-info">@Model.ApprovalRate.ToString("0")%</h2>
+                    <p class="text-muted">Verification Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="report-card">
+            <h4 class="fw-bold mb-4">Claims Status Distribution</h4>
+            <div style="height: 400px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: @Json.Serialize(Model.ChartLabels),
+                    datasets: [{
+                        data: @Json.Serialize(Model.ChartData),
+                        backgroundColor: [
+                            '#F59E0B', // Pending (Orange)
+                            '#4F46E5', // Verified (Blue)
+                            '#10B981', // Approved (Green)
+                            '#EF4444'  // Rejected (Red)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        });
+    </script>
+}

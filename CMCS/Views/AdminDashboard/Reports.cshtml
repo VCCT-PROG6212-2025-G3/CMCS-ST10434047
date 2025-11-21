@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Generate Reports";
+}
+
+<div class="container-fluid" style="max-width: 900px; padding: 40px 24px;">
+    <h1 class="mb-4 fw-bold">Generate Monthly Report</h1>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-5">
+            <h4 class="card-title mb-4">Select Report Period</h4>
+            <p class="text-muted mb-4">This will generate a PDF invoice summary of all <strong>Approved</strong> claims for the selected month.</p>
+
+            <form asp-action="GenerateReport" method="post">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">Month</label>
+                        <select name="month" class="form-select">
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i" selected="@(DateTime.Now.Month == i ? "selected" : null)">
+                                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">Year</label>
+                        <select name="year" class="form-select">
+                            @for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 2; i--)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,13 +1,14 @@
 ﻿using CMCS.Data;
 using CMCS.Models;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CMCS.Controllers
 {
@@ -79,6 +80,7 @@ namespace CMCS.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "HR")]
         public async Task<IActionResult> ManageUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -100,6 +102,7 @@ namespace CMCS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "HR")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateRate(string userId, string hourlyRate)
         {
@@ -204,6 +207,7 @@ namespace CMCS.Controllers
         }
 
         // GET: View claims waiting for final approval
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ViewClaims()
         {
             var claims = await _context.Claims
@@ -217,6 +221,7 @@ namespace CMCS.Controllers
 
         // POST: Final Approval
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveClaim(int claimId)
         {
@@ -243,6 +248,88 @@ namespace CMCS.Controllers
                 TempData["Success"] = "Claim rejected.";
             }
             return RedirectToAction(nameof(ViewClaims));
+        }
+
+        // GET: HR Reports Page
+        [Authorize(Roles = "HR")]
+        public IActionResult Reports()
+        {
+            return View();
+        }
+
+        // POST: Generate PDF Report
+        [HttpPost]
+        [Authorize(Roles = "HR")]
+        public async Task<IActionResult> GenerateReport(int month, int year)
+        {
+            // 1. Fetch Data using LINQ
+            var claims = await _context.Claims
+                .Include(c => c.User)
+                .Where(c => c.Status == ClaimStatus.Approved &&
+                            c.SubmissionDate.Month == month &&
+                            c.SubmissionDate.Year == year)
+                .OrderBy(c => c.SubmissionDate)
+                .ToListAsync();
+
+            // 2. Create PDF in Memory
+            using (var stream = new MemoryStream())
+            {
+                var writer = new PdfWriter(stream);
+                var pdf = new PdfDocument(writer);
+                var document = new Document(pdf);
+                var titleText = new Text("Monthly Approved Claims Report")
+                    .SetFontSize(20).SimulateBold();
+
+                document.Add(new Paragraph(titleText)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph($"Period: {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)} {year}")
+                    .SetFontSize(12)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetMarginBottom(20));
+
+                if (claims.Any())
+                {
+                    // Table Setup
+                    var table = new Table(5).UseAllAvailableWidth();
+                    table.AddHeaderCell("Claim ID");
+                    table.AddHeaderCell("Lecturer");
+                    table.AddHeaderCell("Date");
+                    table.AddHeaderCell("Hours");
+                    table.AddHeaderCell("Total Amount");
+
+                    decimal totalPayout = 0;
+
+                    // Rows
+                    foreach (var claim in claims)
+                    {
+                        table.AddCell($"#{claim.Id}");
+                        table.AddCell($"{claim.User.FirstName} {claim.User.LastName}");
+                        table.AddCell(claim.SubmissionDate.ToString("yyyy-MM-dd"));
+                        table.AddCell(claim.HoursWorked.ToString("0.##"));
+                        table.AddCell(claim.Amount.ToString("C"));
+                        totalPayout += claim.Amount;
+                    }
+
+                    document.Add(table);
+                    var totalText = new Text($"\nTotal Payout: {totalPayout.ToString("C")}")
+                        .SetFontSize(14)
+                        .SimulateBold();
+
+                    document.Add(new Paragraph(totalText)
+                        .SetTextAlignment(TextAlignment.RIGHT)
+                        .SetMarginTop(10));
+                }
+                else
+                {
+                    document.Add(new Paragraph("No approved claims found for this period."));
+                }
+
+                document.Close();
+
+                // 3. Return File
+                return File(stream.ToArray(), "application/pdf", $"Claims_Report_{month}_{year}.pdf");
+            }
         }
     }
 }

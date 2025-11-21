@@ -5,58 +5,305 @@
 }
 
 <style>
-    .details-wrapper {
-        padding: 40px 24px;
+    /* Variables & Base Styles (Matching Dashboard) */
+    :root {
+        --primary-blue: #4F46E5;
+        --primary-blue-light: #6366F1;
+        --neutral-50: #F9FAFB;
+        --neutral-100: #F3F4F6;
+        --neutral-200: #E5E7EB;
+        --neutral-600: #4B5563;
+        --neutral-800: #1F2937;
+        --neutral-900: #111827;
     }
 
-    .details-card {
+    .details-wrapper {
+        padding: 40px 24px;
+        background: var(--neutral-50);
+        min-height: calc(100vh - 73px);
+    }
+
+    .details-container {
         max-width: 900px;
         margin: 0 auto;
-        background: white;
-        border-radius: 12px;
-        padding: 32px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
+
+    /* Header Section */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+    }
+
+    .page-title h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--neutral-900);
+        margin: 0 0 8px 0;
+    }
+
+    .page-title p {
+        color: var(--neutral-600);
+        margin: 0;
+    }
+
+    /* Main Card */
+    .details-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--neutral-200);
+        overflow: hidden;
+    }
+
+    /* Status Banner */
+    .status-banner {
+        padding: 16px 32px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+        .status-banner.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-banner.approved {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-banner.rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+    /* Content Body */
+    .card-body {
+        padding: 32px;
+    }
+
+    /* Grid Layout for Key Info */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--neutral-100);
+        margin-bottom: 32px;
+    }
+
+    .info-item label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--neutral-600);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .info-item .value {
+        font-size: 1.1rem;
+        color: var(--neutral-900);
+        font-weight: 500;
+    }
+
+    .info-item .amount {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+    }
+
+    /* Description Box */
+    .description-box {
+        background: var(--neutral-50);
+        padding: 24px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+    }
+
+        .description-box h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--neutral-800);
+        }
+
+        .description-box p {
+            color: var(--neutral-600);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+    /* Document Link */
+    .doc-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: white;
+        border: 1px solid var(--neutral-200);
+        border-radius: 8px;
+        color: var(--neutral-700);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+        .doc-link:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background: #EEF2FF;
+        }
+
+    /* Buttons */
+    .action-bar {
+        margin-top: 32px;
+        display: flex;
+        gap: 16px;
+    }
+
+    .btn-back {
+        padding: 10px 24px;
+        background: white;
+        border: 1px solid var(--neutral-200);
+        border-radius: 8px;
+        color: var(--neutral-700);
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .btn-back:hover {
+            background: var(--neutral-50);
+            color: var(--neutral-900);
+        }
 </style>
 
 <div class="details-wrapper">
-    <div class="details-card">
-        <h1 class="mb-4">Claim Details</h1>
-        <hr />
-        <dl class="row mt-4">
-            <dt class="col-sm-3">Claim ID</dt>
-            <dd class="col-sm-9">#@Model.Id</dd>
+    <div class="details-container">
 
-            <dt class="col-sm-3">Lecturer</dt>
-            <dd class="col-sm-9">@Model.User.FirstName @Model.User.LastName</dd>
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <h1>Claim Details</h1>
+                <p>Reviewing submission #@Model.Id.ToString().PadLeft(5, '0')</p>
+            </div>
+            <a asp-action="Index" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
 
-            <dt class="col-sm-3">Submission Date</dt>
-            <dd class="col-sm-9">@Model.SubmissionDate.ToLongDateString()</dd>
+        <!-- Main Card -->
+        <div class="details-card">
 
-            <dt class="col-sm-3">Amount</dt>
-            <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+            <!-- Status Banner -->
+            <div class="status-banner @GetStatusClass(Model.Status)">
+                <i class="fas @GetStatusIcon(Model.Status)"></i>
+                @Model.Status.ToString()
+            </div>
 
-            <dt class="col-sm-3">Status</dt>
-            <dd class="col-sm-9"><span class="badge bg-@GetStatusBadgeClass(Model.Status)">@Model.Status.ToString()</span></dd>
+            <div class="card-body">
 
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9"><p>@Model.Description</p></dd>
-        </dl>
-        <div class="mt-4">
-            <a asp-action="Index" class="btn btn-secondary">Back to Claims List</a>
+                <!-- Key Info Grid -->
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Total Amount</label>
+                        <div class="value amount">@Model.Amount.ToString("C")</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Date Submitted</label>
+                        <div class="value">@Model.SubmissionDate.ToString("MMM dd, yyyy")</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Lecturer</label>
+                        <div class="value">@Model.User.FirstName @Model.User.LastName</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Description Column -->
+                    <div class="col-md-8">
+                        <div class="description-box">
+                            <h3><i class="fas fa-align-left me-2"></i>Description of Work</h3>
+                            <p>@Model.Description</p>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.AdditionalNotes))
+                        {
+                            <div class="description-box mt-3">
+                                <h3><i class="fas fa-sticky-note me-2"></i>Additional Notes</h3>
+                                <p>@Model.AdditionalNotes</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Side Stats Column -->
+                    <div class="col-md-4">
+                        <div class="p-4 bg-light rounded-3 h-100">
+                            <h4 class="h6 fw-bold text-uppercase text-muted mb-4">Breakdown</h4>
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted">Hours Worked</span>
+                                <span class="fw-bold">@Model.HoursWorked.ToString("0.##") hrs</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted">Hourly Rate</span>
+                                <span class="fw-bold">@Model.HourlyRate.ToString("C")/hr</span>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-dark">Total</span>
+                                <span class="fw-bold text-primary fs-5">@Model.Amount.ToString("C")</span>
+                            </div>
+
+                            <div class="mt-4">
+                                <label class="d-block text-muted small fw-bold mb-2 text-uppercase">Documents</label>
+                                @if (!string.IsNullOrEmpty(Model.DocumentPath))
+                                {
+                                    <a href="@Model.DocumentPath" target="_blank" class="doc-link w-100 justify-content-center">
+                                        <i class="fas fa-file-download"></i> View Attachment
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small fst-italic">No documents attached</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
 
-@{
-    string GetStatusBadgeClass(ClaimStatus status)
+@functions {
+    string GetStatusClass(ClaimStatus status)
     {
         return status switch
         {
-            ClaimStatus.Pending => "warning text-dark",
-            ClaimStatus.Approved => "success",
-            ClaimStatus.Rejected => "danger",
-            _ => "secondary",
+            ClaimStatus.Pending => "pending",
+            ClaimStatus.Approved => "approved",
+            ClaimStatus.Rejected => "rejected",
+            _ => "pending",
+        };
+    }
+
+    string GetStatusIcon(ClaimStatus status)
+    {
+        return status switch
+        {
+            ClaimStatus.Pending => "fa-clock",
+            ClaimStatus.Approved => "fa-check-circle",
+            ClaimStatus.Rejected => "fa-times-circle",
+            _ => "fa-circle",
         };
     }
 }

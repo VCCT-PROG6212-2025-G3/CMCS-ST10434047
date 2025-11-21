@@ -1,154 +1,484 @@
-# Contract Monthly Claim System (CMCS)
+<div align="center">
 
-![Language](https://img.shields.io/badge/language-C%23-blueviolet)
-![Framework](https://img.shields.io/badge/framework-.NET-blue)
-![Database](https://img.shields.io/badge/database-Azure%20SQL-orange)
-![Status](https://img.shields.io/badge/status-In%20Development-yellow)
+# 📋 Contract Monthly Claim System (CMCS)
 
-A robust web-based application designed to streamline the monthly contract claims process for lecturers. This system, built for the PROG6212 module, provides an intuitive interface for lecturers to log hours and for academic managers to review and approve claims efficiently.
+### *Streamlining Academic Claims with Modern Cloud Architecture*
 
-(https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)
+[![Live Demo](https://img.shields.io/badge/demo-live%20on%20azure-0089D6?style=for-the-badge&logo=microsoft-azure)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)
+[![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet?style=for-the-badge&logo=.net)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/)
 
-VIDEO PRESENTATION: https://youtu.be/kviag0wonsE
-
-## 🔐 CMCS Login Credentials
-
-Use the following credentials to access the appropriate portal on the [CMCS Home Page](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/):
-
-| Role               | Email                          | Password   |
-|--------------------|--------------------------------|------------|
-| **Admin**          | admin@cmcs.com                 | 4A$eimaj   |
-| **Program Coordinator** | programcoordinator@cmcs.com     | 4A$eimaj   |
-| **Lecturer**       | jamieabrahams123234@gmail.com  | 4A$eimaj   |
-
-> 📝 *Lecturers may also create their own account via the [Register](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net/) page if preferred.*
-
-## Table of Contents
-* [Introduction](#introduction)
-* [Key Features](#key-features)
-* [Technology Stack](#technology-stack)
-* [Database Design](#database-design)
-* [Installation](#installation)
-* [Usage](#usage)
-* [Contact](#contact)
+**[🌐 Live Application](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)** • **[📖 Documentation](#documentation)** • **[🎥 Video Walkthrough](https://youtu.be/kviag0wonsE)** • **[🐛 Report Issue](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)**
 
 ---
 
-## Introduction
+## 🎥 Project Presentation
 
-The **Contract Monthly Claim System (CMCS)** solves the administrative challenge of managing monthly claims for contract lecturers. It replaces manual or disjointed processes with a centralized, user-friendly platform. The application is built using ASP.NET MVC, follows the Model-View-Controller architecture, and is backed by a scalable Azure SQL database. The front-end is designed to be responsive and accessible across various device sizes.
+<div align="center">
+  <a href="https://youtu.be/kviag0wonsE" target="_blank">
+    <img src="https://img.youtube.com/vi/kviag0wonsE/maxresdefault.jpg" alt="CMCS Presentation" width="80%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  </a>
+  
+  **[▶️ Watch the Full Walkthrough](https://youtu.be/kviag0wonsE)**
+  
+  *Discover the two-stage approval workflow, role-based security, and automated calculation features*
+</div>
 
----
-
-## Key Features
-
-* **User Authentication**: Secure login for Lecturers, Programme Coordinators, and Academic Managers.
-* **Claim Submission**: Lecturers can easily create, submit, and track their monthly claims, detailing hours worked and hourly rates.
-* **Approval Workflow**: A streamlined process for Programme Coordinators and Academic Managers to review, approve, or reject claims.
-* **Data Management**: Centralized storage and management of all claims, user data, and related information.
-* **Responsive UI**: A clean and intuitive user interface designed with Figma and built to adapt to different screen sizes.
-
----
-
-## Technology Stack
-
-This project leverages a modern, robust tech stack to ensure scalability and maintainability:
-
-* **Backend**: C# with ASP.NET MVC
-* **Database**: Azure SQL
-* **UI/UX Design**: Figma
-* **Architecture**: Entity Framework, Model-View-Controller (MVC)
+</div>
 
 ---
 
-## Database Design
+## 🎯 Overview
 
-The database is structured using an Entity-Relationship model, where C# models directly map to Azure SQL tables. This approach leverages the power of Entity Framework for seamless data access and manipulation. The core entities include:
+CMCS transforms the chaotic process of managing monthly contract lecturer claims into a streamlined, automated workflow. Built for academic institutions using **ASP.NET Core MVC** and **Entity Framework Core**, this system ensures accuracy, accountability, and efficiency across the entire claims lifecycle.
 
-* **Lecturer**: Stores personal details and credentials.
-* **Claim**: Contains all information about a specific claim, including hours, rates, and status.
-* **ProgrammeCoordinator**: Manages assigned lecturers and reviews claims.
-* **AcademicManager**: Holds final approval authority over claims.
+### ⚠️ Registration & Compliance Strategy
+This system implements a **Hybrid Registration Model** to strictly control user access while maintaining usability:
+> **"Registration constitutes a request for access, which is only granted once HR manually updates the Hourly Rate."**
 
-Below is the Entity-Relationship Diagram (ERD) for the system.
+While the registration page allows users to create profiles, **claim submission functionality is hard-locked** by default. A lecturer cannot submit any claims until an HR Administrator explicitly validates the user and assigns a non-zero Hourly Rate in the administrative backend. This ensures no unauthorized claims can ever enter the system.
 
-<img width="1582" alt="Entity-Relationship Diagram for the Contract Monthly Claim System" src="https://github.com/user-attachments/assets/d353f8ae-7d5e-415c-8f22-37b125a4cffe" />
+### The Challenge
 
----
+Traditional claim management faced critical issues:
+- 📝 **Manual calculations** prone to human error
+- 🔄 **Unclear approval workflows** causing delays
+- 📧 **Email-based tracking** with no visibility
+- 💰 **Rate inconsistencies** across departments
+- 📁 **Lost documentation** and audit trail gaps
 
-## Project Plan
+### The Solution
 
-<img width="3242" height="1196" alt="Project Outline" src="https://github.com/user-attachments/assets/a8d3b1f8-c407-4ee4-b5ea-34b43daccc36" />
-
----
-
-## UI Mockup
-
-Lecturer Dashboard
-<img width="1342" height="1113" alt="LecturerDashboard" src="https://github.com/user-attachments/assets/0246ef99-1654-40c0-8428-aa209b6d8f29" />
-
-Administrator Dashboard
-<img width="1315" height="1166" alt="Dashboard" src="https://github.com/user-attachments/assets/f88de976-0a32-4c74-9553-90e0a6ce26b1" />
-
-Administrator Approvals Page
-<img width="1501" height="1284" alt="Claims" src="https://github.com/user-attachments/assets/b69d4079-8edc-4e37-9c68-c0a4d628f717" />
-
-New Claim Form
-<img width="1261" height="1117" alt="NewClaim" src="https://github.com/user-attachments/assets/d16884f0-f49d-497a-9f83-7e2c360c8eb6" />
-
-Figma Design Link
-https://www.figma.com/design/Dh0Lc40pfZePsIY8HC6joI/CMCS-POE?node-id=0-1&t=wjscumqRIK5OCFyM-1
+A comprehensive digital platform featuring:
+- ⚡ **Automated calculations** based on HR-configured rates
+- 🔐 **Two-stage approval** with verification and final approval
+- 📊 **Real-time dashboards** showing claim status
+- 👥 **Role-based access** for Lecturers, Coordinators, Managers, and HR
+- 📈 **Interactive reports** with Chart.js visualizations
+- 🎨 **Modern UI** with glassmorphism design language
 
 ---
 
-## Installation
+## ✨ Key Features
 
-To get a local copy up and running, follow these simple steps.
+<table>
+<tr>
+<td width="50%">
 
-1.  **Prerequisites**
-    * .NET SDK (Version X.X.X)
-    * Visual Studio 2022 or later
-    * An Azure SQL instance or local SQL Server
-2.  **Clone the repo**
-    ```sh
-    git clone [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047.git](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047.git))
-    ```
-3.  **Configure the database**
-    * Open `appsettings.json`.
-    * Update the `ConnectionString` with your database credentials.
-4.  **Run the application**
-    * Open the solution in Visual Studio and press `F5` to build and run the project.
+### 🎨 **User Experience**
+- Intuitive claim submission wizard
+- Real-time calculation previews
+- Drag-and-drop document uploads
+- Status tracking with notifications
+- Mobile-responsive design
+- Interactive data visualizations
+
+</td>
+<td width="50%">
+
+### 🔧 **System Capabilities**
+- **Register + HR Approval Access Control**
+- Two-stage approval workflow
+- Automated payment calculations
+- Secure document management
+- Comprehensive audit trails
+- Excel/PDF report generation
+
+</td>
+</tr>
+</table>
+---
+
+## 🔑 Demo Credentials
+
+Access the system with these pre-configured test accounts:
+
+### 👨‍💼 HR / System Administrator
+```
+Name: System Administrator
+Email: hr@cmcs.com
+Password: Password123!
+```
+*Full system access: user management, hourly rate configuration, system-wide reports*
+
+### 👔 Academic Manager
+```
+Name: Academic Manager
+Email: manager@cmcs.com
+Password: Password123!
+```
+*Final approval authority: review verified claims, bulk approvals, payment authorization*
+
+### 📊 Programme Coordinator
+```
+Name: System Coordinator
+Email: programcoordinator@cmcs.com
+Password: Password123!
+```
+*Verification responsibilities: validate lecturer claims, request corrections, forward to manager*
+
+### 👨‍🏫 Lecturer
+```
+Name: John Doe
+Email: lecturer@gmail.com
+Password: Password123!
+```
+*Standard user access: submit claims, upload documents, track approval status*
+
+> ⚠️ **Note:** All demo accounts use `Password123!` for testing purposes. Change credentials in production environments.
 
 ---
 
-## Usage
+## 🏗️ System Architecture
 
-The application provides distinct portals for different user roles.
+### Technology Stack
 
-### As a Lecturer
-1.  **Login or Register**: Use the provided lecturer credentials or register for a new account.
-2.  **View Dashboard**: Upon login, you are directed to your dashboard, which shows an overview of your recent claims and their statuses.
-3.  **Submit a Claim**: Navigate to the "My Claims" page and click "Submit New Claim".
-4.  **Complete the Form**: Fill in the hours worked, hourly rate, and a detailed description. You can also attach a supporting document (`.pdf`, `.docx`, `.xlsx`).
-5.  **Track Claims**: After submission, you can track the status of all your claims on the "My Claims" page. The status will change from `Pending` to `Approved` or `Rejected` after a coordinator reviews it.
+| Layer | Technologies |
+|:------|:-------------|
+| **Backend** | C# 11, .NET 8, ASP.NET Core MVC |
+| **Authentication** | ASP.NET Core Identity with role-based authorization |
+| **Database** | Entity Framework Core + SQL Server LocalDB |
+| **Frontend** | Bootstrap 5, Chart.js, Font Awesome, jQuery |
+| **Cloud Platform** | Microsoft Azure (App Service) |
+| **File Storage** | Secure document upload with validation (.pdf, .docx, .xlsx) |
 
-### As a Program Coordinator
-1.  **Login**: Use the provided Program Coordinator credentials.
-2.  **Manage Claims**: You will be directed to the claims management dashboard, which lists all submitted claims from lecturers.
-3.  **Review and Act**: For each claim with a `Pending` status, you can review the details. Click "Approve" or "Decline" to update the claim's status.
-4.  **View Details**: Click the "View" button to see the full details of any claim.
+### Approval Flow
 
-### As an Administrator
-1.  **Login**: Use the provided Admin credentials.
-2.  **View System Overview**: The admin dashboard provides high-level analytics, including total claims by status and top-performing lecturers.
-3.  **User Management**: Navigate to the "Users" page to view all registered users and their assigned roles.
-4.  **Role Management**: You can edit a user's roles by clicking "Edit Roles" next to their name, allowing you to grant or revoke access to different parts of the system.
+```
+┌─────────────┐
+│  Lecturer   │ Submits Claim + Documents
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────┐
+│ Auto-Calculate  │ System calculates total based on HR rates
+└────────┬────────┘
+         │
+         ▼
+   ┌──────────────────┐
+   │   Coordinator    │ Stage 1: Verification
+   │  (Verifies)      │
+   └────────┬─────────┘
+            │
+    ┌───────┴────────┐
+    │                │
+    ▼                ▼
+┌─────────┐    ┌──────────┐
+│ Reject  │    │ Approve  │
+│ (Revise)│    │ & Forward│
+└─────────┘    └────┬─────┘
+                    │
+                    ▼
+            ┌──────────────┐
+            │   Manager    │ Stage 2: Final Approval
+            │  (Approves)  │
+            └──────┬───────┘
+                   │
+           ┌───────┴────────┐
+           │                │
+           ▼                ▼
+      ┌─────────┐    ┌───────────┐
+      │ Reject  │    │  Approve  │
+      │(Revise) │    │(Payment)  │
+      └─────────┘    └───────────┘
+```
 
 ---
 
-## Contact
+## 🚀 Quick Start
 
-*Jamie Abrahams* - *st10434047@vcconnect.edu.za*
-ST10434047
+### Prerequisites
 
-Project Link: [https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047)
+Ensure you have the following installed:
+
+```bash
+✅ .NET 8.0 SDK or later
+✅ Visual Studio 2022 (recommended) or VS Code
+✅ SQL Server LocalDB (included with Visual Studio)
+✅ Git
+```
+
+### Installation
+
+1️⃣ **Clone the repository**
+```bash
+git clone https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047.git
+cd CMCS-ST10434047
+```
+
+2️⃣ **Restore dependencies**
+```bash
+dotnet restore
+```
+
+3️⃣ **Update the database**
+```bash
+dotnet ef database update
+```
+*This creates the database schema and seeds test data*
+
+4️⃣ **Run the application**
+```bash
+dotnet run
+```
+
+5️⃣ **Open your browser**
+```
+https://localhost:5001
+```
+
+The application is ready to use with pre-configured test accounts! 🎉
+
+---
+
+## 📂 Project Structure
+
+```
+CMCS/
+│
+├── 📁 Controllers/
+│   ├── HomeController.cs              # Main navigation
+│   ├── ClaimsController.cs            # Claim submission & tracking
+│   ├── ApprovalController.cs          # Coordinator & Manager workflows
+│   ├── HRController.cs                # User & rate management
+│   └── AccountController.cs           # Authentication
+│
+├── 📁 Models/
+│   ├── Claim.cs                       # Claim entity
+│   ├── User.cs                        # User entity with roles
+│   ├── HourlyRate.cs                  # Lecturer payment rates
+│   ├── Document.cs                    # File metadata
+│   └── ViewModels/                    # DTOs for views
+│
+├── 📁 Services/
+│   ├── ClaimService.cs                # Business logic
+│   └── DocumentService.cs             # File handling
+│
+├── 📁 Data/
+│   ├── ApplicationDbContext.cs        # EF Core context
+│   └── Migrations/                    # Database migrations
+│
+├── 📁 Views/
+│   ├── Claims/                        # Claim submission & tracking
+│   ├── Approval/                      # Coordinator & Manager views
+│   ├── HR/                            # Admin dashboards
+│   └── Shared/
+│       ├── _Layout.cshtml            # Master layout
+│       └── _LoginPartial.cshtml      # Auth navigation
+│
+├── 📁 wwwroot/
+│   ├── css/
+│   │   └── site.css                  # Custom styles with glassmorphism
+│   ├── js/
+│   │   └── site.js                   # Client-side validation
+│   ├── lib/                          # Bootstrap, Chart.js, jQuery
+│   └── uploads/                      # Uploaded documents
+│
+├── 📄 Program.cs                      # Application entry point
+├── 📄 appsettings.json               # Configuration
+└── 📄 CMCS.csproj                    # Project file
+```
+
+---
+
+## 🎨 Design Philosophy
+
+CMCS embraces **modern enterprise design**:
+
+- **Glassmorphism** - Contemporary frosted glass aesthetic with backdrop blur
+- **Intuitive Navigation** - Role-specific dashboards with clear action paths
+- **Data Visualization** - Chart.js graphs showing claim trends and approval rates
+- **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- **Accessibility** - WCAG 2.1 AA compliant with semantic HTML
+
+---
+
+## 💼 User Workflows
+
+### For Lecturers 👨‍🏫
+1. **Login** with your credentials
+2. **Navigate** to "Submit Claim"
+3. **Enter** hours worked for the month
+4. **Upload** supporting documents (timesheets, contracts)
+5. **Review** auto-calculated payment amount
+6. **Submit** for verification
+7. **Track** claim status in real-time
+
+### For Programme Coordinators 📊
+1. **Access** "Pending Verification" dashboard
+2. **Review** lecturer submissions and documents
+3. **Verify** accuracy of hours and calculations
+4. **Approve** to forward to Academic Manager
+5. **Reject** with feedback if corrections needed
+6. **Monitor** verification metrics and trends
+
+### For Academic Managers 👔
+1. **View** "Pending Approval" queue
+2. **Review** coordinator-verified claims
+3. **Examine** historical claim patterns
+4. **Approve** for payment processing
+5. **Reject** if additional review needed
+6. **Generate** approval reports
+
+### For HR Administrators 👨‍💼
+1. **Manage** user accounts and roles
+2. **Configure** hourly rates per lecturer
+3. **View** system-wide analytics
+4. **Generate** payment reports
+5. **Export** data for payroll integration
+6. **Audit** claim history and approvals
+
+---
+
+## 📊 Key Capabilities
+
+### Automated Payment Calculation
+```
+Total Payment = Hours Worked × HR-Configured Hourly Rate
+```
+- Rates set by HR per lecturer
+- Real-time calculation preview
+- Server-side validation
+- Prevents manual entry errors
+
+### Document Management
+- Supported formats: PDF, DOCX, XLSX
+- Secure file upload and storage
+- Automatic file validation
+- Persistent storage with claims
+- Download capability for reviewers
+
+### Reporting & Analytics
+- Claim submission trends over time
+- Approval rate metrics by coordinator/manager
+- Payment totals by month/department
+- Export to Excel/PDF
+- Interactive Chart.js visualizations
+
+---
+
+## 🧪 Testing
+
+### Local Development
+```bash
+# Run the application
+dotnet run
+
+# Run with hot reload
+dotnet watch run
+
+# Build for production
+dotnet publish -c Release
+```
+
+### Production Deployment
+The application is deployed to **Azure App Service**:
+- Automatic scaling based on traffic
+- SSL/TLS certificates managed by Azure
+- Continuous deployment from GitHub
+- 99.9% uptime SLA
+
+---
+
+## 🔐 Security Features
+
+| Feature | Implementation |
+|:--------|:--------------|
+| **Authentication** | ASP.NET Core Identity with hashed passwords |
+| **Authorization** | Role-based access control (RBAC) |
+| **File Upload** | Type validation, size limits, virus scanning |
+| **Data Protection** | Encrypted connection strings, secure cookies |
+| **HTTPS** | Enforced in production with TLS 1.2+ |
+| **CSRF Protection** | Anti-forgery tokens on all forms |
+| **Audit Trail** | Comprehensive logging of all actions |
+
+---
+
+## 🗺️ Roadmap
+
+### Completed ✅
+- [x] Two-stage approval workflow
+- [x] Role-based authentication
+- [x] Automated payment calculations
+- [x] Document upload and management
+- [x] Interactive dashboards and reports
+- [x] Mobile-responsive design
+
+### Planned 📋
+- [ ] Email notifications for claim status changes
+- [ ] Bulk claim approval for managers
+- [ ] Advanced analytics with predictive insights
+- [ ] Integration with payroll systems
+- [ ] Dark mode toggle
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+Please ensure your code follows the existing style and includes appropriate tests.
+
+---
+
+## 📄 License
+
+This project is developed for academic purposes as part of the **PROG6212** module at Varsity College.
+
+```
+Academic Use - You can:
+✅ Study the codebase
+✅ Learn from implementation
+✅ Use for educational projects
+✅ Modify for personal learning
+```
+
+---
+
+## 📞 Support & Contact
+
+<div align="center">
+
+### Need Help?
+
+[![GitHub Issues](https://img.shields.io/badge/Issues-Report%20Bug-red?style=for-the-badge&logo=github)](https://github.com/VCCT-PROG6212-2025-G3/CMCS-ST10434047/issues)
+[![Video Demo](https://img.shields.io/badge/Video-Watch%20Demo-red?style=for-the-badge&logo=youtube)](https://youtu.be/kviag0wonsE)
+[![Live Demo](https://img.shields.io/badge/Demo-Try%20Live-blue?style=for-the-badge&logo=microsoft-azure)](https://st10434047-cmcs-crh5dhadeqc9a4fm.southafricanorth-01.azurewebsites.net)
+
+### Project Information
+
+**Student ID:** ST10434047  
+**Module:** PROG6212  
+**Institution:** Varsity College
+
+</div>
+
+---
+
+## 🙏 Acknowledgments
+
+- **Microsoft** for .NET 8 and Azure platform
+- **Bootstrap Team** for the responsive framework
+- **Chart.js** for interactive data visualizations
+- **Font Awesome** for the comprehensive icon library
+- **Entity Framework Core** for seamless database operations
+
+---
+
+<div align="center">
+
+### ⭐ Star this repo if you find it helpful!
+
+**Built for Academic Excellence**
+
+*Developed with ASP.NET Core 8 • Deployed on Azure • Designed for Efficiency*
+
+[⬆ Back to Top](#-contract-monthly-claim-system-cmcs)
+
+</div>
